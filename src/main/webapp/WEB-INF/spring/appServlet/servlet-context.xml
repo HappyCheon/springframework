@@ -16,6 +16,7 @@
 	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/member/**" location="/resources/member/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -50,7 +51,11 @@
       <exclude-mapping path="/member/memLogin"/>
       <exclude-mapping path="/member/memLogout"/>
       <exclude-mapping path="/member/memJoin"/>
-      <exclude-mapping path="/member/memList"/>
+      <exclude-mapping path="/member/memIdCheck"/>
+      <exclude-mapping path="/member/nickNameCheck"/>
+      <exclude-mapping path="/member/memIdPwdSearch"/>
+      <exclude-mapping path="/member/memIdPwdSearchOk"/>
+      <!-- <exclude-mapping path="/member/memList"/> -->
       <beans:ref bean="memberInterceptor"/>
     </interceptor>
     <interceptor>

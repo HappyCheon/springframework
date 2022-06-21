@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
+<script>
+  function memDeleteCheck() {
+	  let ans = confirm("탈퇴 하시겠습니까?");
+	  if(!ans) return false;
+	  else location.href = "${ctp}/member/memDeleteOk";
+  }
+</script>
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
@@ -44,7 +51,7 @@
 	      <div class="w3-dropdown-content w3-bar-block w3-card-4">
 	        <a href="${ctp}/member/memMain" class="w3-bar-item w3-button">회원메인</a>
 	        <a href="${ctp}/member/memList" class="w3-bar-item w3-button">회원리스트</a>
-	        <a href="${ctp}/member/memUpdate" class="w3-bar-item w3-button">정보수정</a>
+	        <a href="${ctp}/member/memPwdCheck" class="w3-bar-item w3-button">정보수정</a>
 	        <a href="javascript:memDeleteCheck()" class="w3-bar-item w3-button">회원탈퇴</a>
 	        <c:if test="${sLevel == 0}">
 	        	<a href="${ctp}/shop/input/optionMenu" class="w3-bar-item w3-button">관리자메뉴</a>

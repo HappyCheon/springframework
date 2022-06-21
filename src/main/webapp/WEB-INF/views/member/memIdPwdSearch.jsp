@@ -88,39 +88,10 @@
     		$("#pwdEmail").focus();
     		return false;
     	}
+    	else {
+    	  location.href = "${ctp}/member/memIdPwdSearchOk?mid="+mid+"&toMail="+email;
+    	}
     	
-    	$.ajax({
-    		type   : "post",
-    		url    : "${ctp}/memIdPwdSearchOk",
-    		data   : {
-    			mid  : mid,
-    			email: email
-    		},
-    		success: function(data) {
-    			let str = "";
-    			if(data == "") {
-    				alert("등록된 자료가 없습니다.");
-    			}
-    			else {
-    				if(data.indexOf("탈퇴회원") != -1) {
-    					alert("이미 탈퇴하신 회원입니다.(현재 아이디로 사용불가)");
-    				}
-    				else {
-	    				alert("회원확인 Ok! 신규비밀번호를 등록하세요.");
-	    				$("#pwdMid").prop("readonly",true);
-	    				$("#passwordBtn").hide();
-	    				str += '<div><font color="brown"><b>신규비밀번호로 등록합니다. 새로 작성할 비밀번호와 확인비밀번호를 입력하세요.</b></font></div>';
-	    				str += '<input type="password" name="newPwd1" id="newPwd1" placeholder="신규 비밀번호를 입력하세요." class="form-control m-1" />';
-	    				str += '<input type="password" name="newPwd2" id="newPwd2" placeholder="신규 비밀번호를 한번더 입력하세요." class="form-control m-1" />';
-	    				str += '<input type="button" value="신규 비밀번호 등록" onclick="pwdInputCheck()" class="btn btn-primary form-control m-1" />';
-	    				$("#demo").html(str + "<hr/>");
-    				}
-    			}
-    		},
-    		error : function() {
-    			alert("전송오류~~");
-    		}
-    	});
     }
     
   	// 신규비밀번호 등록
