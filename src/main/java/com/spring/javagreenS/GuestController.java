@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.javagreenS.pagination.PageProcess;
 import com.spring.javagreenS.service.GuestService;
 import com.spring.javagreenS.vo.GuestVO;
 
@@ -19,6 +20,9 @@ public class GuestController {
 	
 	@Autowired
 	GuestService guestService;
+	
+	@Autowired
+	PageProcess pageProcess;
 	
 	@RequestMapping(value = "/guestList", method = RequestMethod.GET)
 	public String gusetListGet(Model model,
@@ -43,6 +47,9 @@ public class GuestController {
 		model.addAttribute("blockSize", blockSize);
 		model.addAttribute("curBlock", curBlock);
 		model.addAttribute("lastBlock", lastBlock);
+		
+		// model.addAttribute("pageVO", pageVO);
+		// model.addAttribute("vos", vos);
 		
 		return "guest/guestList";
 	}

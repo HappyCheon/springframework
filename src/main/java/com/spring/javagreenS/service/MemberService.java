@@ -16,7 +16,7 @@ public interface MemberService {
 
 	public void setMemberVisitProcess(MemberVO vo);
 
-	public ArrayList<MemberVO> getMemList();
+	public ArrayList<MemberVO> getMemList(int startIndexNo, int pageSize);
 
 	public int setMemUpdateOk(MultipartFile fName, MemberVO vo);
 
@@ -25,5 +25,7 @@ public interface MemberService {
 	public void setPwdChange(String mid, String pwd);
 
 	public MemberVO getMemIdEmailCheck(String mid, String toMail);
+
+	public int totRecCnt();
 
 }
