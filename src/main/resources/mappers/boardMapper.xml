@@ -5,12 +5,31 @@
     select count(*) from board2;
   </select>
   
+  <select id="totSearchRecCnt" resultType="int">
+    select count(*) from board2 where ${search} like concat('%',#{searchString},'%');
+  </select>
+  
   <select id="getBoardList" resultType="com.spring.javagreenS.vo.BoardVO">
-    select * from board2 order by idx desc limit #{startIndexNo},#{pageSize};
+    select *, cast(TIMESTAMPDIFF(MINUTE, wDate, NOW()) / 60 as signed integer) AS diffTime  from board2 order by idx desc limit #{startIndexNo},#{pageSize};
+  </select>
+  
+  <select id="getBoardSearch" resultType="com.spring.javagreenS.vo.BoardVO">
+    select *, cast(TIMESTAMPDIFF(MINUTE, wDate, NOW()) / 60 as signed integer) AS diffTime  from board2 where ${search} like concat('%',#{searchString},'%') order by idx desc limit #{startIndexNo},#{pageSize};
   </select>
   
   <select id="getBoardContent" resultType="com.spring.javagreenS.vo.BoardVO">
     select * from board2 where idx = #{idx};
+  </select>
+  
+  <!-- <![CDATA[idx > 5]]> -->
+  <select id="getPreNext" resultType="com.spring.javagreenS.vo.BoardVO">
+    select idx,title from board2 where  idx in (
+      (select idx from board2 where <![CDATA[idx < #{idx}]]> order by idx desc limit 1),
+      (select idx from board2 where <![CDATA[idx > #{idx}]]> limit 1));
+  </select>
+  
+  <select id="getMinIdx" resultType="int">
+    select min(idx) from board2;
   </select>
   
   

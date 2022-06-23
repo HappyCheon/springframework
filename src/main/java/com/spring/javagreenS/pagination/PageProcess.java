@@ -33,7 +33,13 @@ public class PageProcess {
 			totRecCnt = guestDAO.totRecCnt();
 		}
 		else if(section.equals("board")) {
-			totRecCnt = boardDAO.totRecCnt();
+			if(searchString.equals("")) {
+  			totRecCnt = boardDAO.totRecCnt();
+			}
+			else {
+				String search = part;
+				totRecCnt = boardDAO.totSearchRecCnt(search, searchString);
+			}
 		}
 		
 		int totPage = (totRecCnt%pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize)+1;

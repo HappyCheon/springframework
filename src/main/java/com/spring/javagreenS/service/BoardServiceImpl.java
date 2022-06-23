@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -98,5 +99,20 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO getBoardContent(int idx) {
 		return boardDAO.getBoardContent(idx);
+	}
+
+	@Override
+	public List<BoardVO> getBoardSearch(int startIndexNo, int pageSize, String search, String searchString) {
+		return boardDAO.getBoardSearch(startIndexNo, pageSize, search, searchString);
+	}
+
+	@Override
+	public ArrayList<BoardVO> getPreNext(int idx) {
+		return boardDAO.getPreNext(idx);
+	}
+
+	@Override
+	public int getMinIdx() {
+		return boardDAO.getMinIdx();
 	}
 }

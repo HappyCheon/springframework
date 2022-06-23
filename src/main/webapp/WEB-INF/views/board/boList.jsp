@@ -27,6 +27,10 @@
     		searchForm.submit();
     	}
     }
+    
+    function searchChange() {
+    	document.getElementById("searchString").focus();
+    }
   </script>
 </head>
 <body>
@@ -66,12 +70,12 @@
         <td>${curScrStartNo}</td>
         <td class="text-left"><a href="boContent?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}">${vo.title}</a>
           <c:if test="${vo.replyCount != 0}">[${vo.replyCount}]</c:if>
-          <c:if test="${vo.WNdate <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
+          <c:if test="${vo.diffTime <= 24}"><img src="${ctp}/images/new.gif"/></c:if>
         </td>
         <td>${vo.nickName}</td>
         <td>
-          <c:if test="${vo.WNdate <= 24}">${fn:substring(vo.WDate,11,19)}</c:if>
-          <c:if test="${vo.WNdate > 24}">${fn:substring(vo.WDate,0,10)}</c:if>
+          <c:if test="${vo.diffTime <= 24}">${fn:substring(vo.WDate,11,19)}</c:if>
+          <c:if test="${vo.diffTime > 24}">${fn:substring(vo.WDate,0,10)}</c:if>
         </td>
         <td>${vo.readNum}</td>
         <td>${vo.good}</td>
@@ -86,24 +90,24 @@
 <div class="text-center">
   <ul class="pagination justify-content-center">
 	  <c:if test="${pageVO.pag > 1}">
-	    <li class="page-item"><a href="boList?pag=1" class="page-link text-secondary">◁◁</a></li>
+	    <li class="page-item"><a href="boList?pag=1&pageSize=${pageVO.pageSize}" class="page-link text-secondary">◁◁</a></li>
 	  </c:if>
 	  <c:if test="${pageVO.curBlock > 0}">
-	    <li class="page-item"><a href="boList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}" class="page-link text-secondary">◀</a></li>
+	    <li class="page-item"><a href="boList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">◀</a></li>
 	  </c:if>
 	  <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize)+pageVO.blockSize}">
 	    <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
-	      <li class="page-item active"><a href="boList?pag=${i}" class="page-link text-light bg-secondary border-secondary">${i}</a></li>
+	      <li class="page-item active"><a href="boList?pag=${i}&pageSize=${pageVO.pageSize}" class="page-link text-light bg-secondary border-secondary">${i}</a></li>
 	    </c:if>
 	    <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
-	      <li class="page-item"><a href='boList?pag=${i}' class="page-link text-secondary">${i}</a></li>
+	      <li class="page-item"><a href='boList?pag=${i}&pageSize=${pageVO.pageSize}' class="page-link text-secondary">${i}</a></li>
 	    </c:if>
 	  </c:forEach>
 	  <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
-	    <li class="page-item"><a href="boList?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}" class="page-link text-secondary">▶</a></li>
+	    <li class="page-item"><a href="boList?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">▶</a></li>
 	  </c:if>
 	  <c:if test="${pageVO.pag != pageVO.totPage}">
-	    <li class="page-item"><a href="boList?pag=${pageVO.totPage}" class="page-link text-secondary">▷▷</a></li>
+	    <li class="page-item"><a href="boList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">▷▷</a></li>
 	  </c:if>
   </ul>
 </div>

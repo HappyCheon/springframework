@@ -141,6 +141,10 @@
   </table>
   <table class="table table-bordered">
     <tr>
+    	<th>글제목</th>
+    	<td colspan="3">${vo.title}</td>
+    </tr>
+    <tr>
     	<th>글쓴이</th>
     	<td>${vo.nickName}</td>
     	<th>글쓴날짜</th>
@@ -181,11 +185,13 @@
   <table class="table table-borderless">
     <tr>
       <td>
-        <c:if test="${nextVo.nextIdx != 0}">
-	        ☝ <a href="boContent.bo?idx=${nextVo.nextIdx}&pag=${pag}&pageSize=${pageSize}">다음글 : ${nextVo.nextTitle}</a><br/>
+        <c:if test="${!empty pnVos[1]}">
+	        ☝ 다음글 : <a href="boContent?idx=${pnVos[1].idx}&pag=${pag}&pageSize=${pageSize}">${pnVos[1].title}</a><br/>
         </c:if>
-        <c:if test="${preVo.preIdx != 0}">
-        	👇 <a href="boContent.bo?idx=${preVo.preIdx}&pag=${pag}&pageSize=${pageSize}">이전글 : ${preVo.preTitle}</a><br/>
+        <c:if test="${!empty pnVos[0]}">
+        	<c:if test="${minIdx == vo.idx}">☝ 다음글 :</c:if> 
+        	<c:if test="${minIdx != vo.idx}">👇 이전글 :</c:if> 
+        	<a href="boContent?idx=${pnVos[0].idx}&pag=${pag}&pageSize=${pageSize}">${pnVos[0].title}</a><br/>
         </c:if>
       </td>
     </tr>

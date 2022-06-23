@@ -88,7 +88,6 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int setMemUpdateOk(MultipartFile fName, MemberVO vo) {
-		System.out.println("vo : " + vo);
 		int res = 0;
 		try {
 			String oFileName = fName.getOriginalFilename();

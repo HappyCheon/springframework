@@ -16,8 +16,7 @@ public @Data class BoardVO {
 	private String mid;
 	
 	// 날짜형식필드를 '문자'와 '숫자'로 저장시켜주기 위한 변수를 선언
-	private String wCdate;
-	private int wNdate;
+	private int diffTime;
 	
 	// '이전글','다음글'을 위한 변수설정
 	private int preIdx;
