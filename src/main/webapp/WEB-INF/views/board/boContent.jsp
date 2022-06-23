@@ -28,7 +28,7 @@
     function boardDelCheck() {
     	let ans = confirm("현 게시물을 삭제하시겠습니까?");
     	if(ans) {
-    		location.href = "boDeleteOk.bo?idx=${vo.idx}";
+    		location.href = "boDeleteOk?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}";
     	}
     }
     
@@ -128,10 +128,10 @@
   </style>
 </head>
 <body>
-<c:if test="${sLevel != 0}">
+<%-- <c:if test="${sLevel != 0}"> --%>
 	<jsp:include page="/WEB-INF/views/include/nav.jsp"/>
 	<jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
-</c:if>
+<%-- </c:if> --%>
 <p><br/></p>
 <div class="container">
   <h2 class="text-center">글 내 용 보 기</h2>
@@ -174,7 +174,9 @@
     			<input type="button" value="돌아가기" onclick="location.href='boList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
     		</c:if>
     		<c:if test="${sMid == vo.mid || sLevel == 0}">
-	    		<input type="button" value="수정하기" onclick="location.href='boUpdate?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
+    		  <c:if test="${sMid == vo.mid}">
+		    		<input type="button" value="수정하기" onclick="location.href='boUpdate?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
+	    		</c:if>
 	    		<input type="button" value="삭제하기" onclick="boardDelCheck()" class="btn btn-secondary"/>
     		</c:if>
     	</td>

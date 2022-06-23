@@ -31,7 +31,8 @@ select idx,title from board2 where  idx in (
       (select idx from board2 where idx > 5 limit 1),
       (select idx from board2 where idx < 5 order by idx desc limit 1)
       );
-
+      
+select min(idx) from board2;
 
 /* 
    DATEDIFF(날짜1, 날짜2) : '날짜1 - 날짜2'의 결과를 반환한다.

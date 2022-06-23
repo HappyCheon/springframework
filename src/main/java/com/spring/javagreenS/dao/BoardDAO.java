@@ -27,4 +27,8 @@ public interface BoardDAO {
 
 	public int getMinIdx();
 
+	public void setBoardDelete(@Param("idx") int idx);
+
+	public void setBoardUpdate(@Param("vo") BoardVO vo);
+
 }
