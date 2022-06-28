@@ -12,4 +12,6 @@ public @Data class PageVO {
 	private int blockSize;
 	private int curBlock;
 	private int lastBlock;
+	
+	private String part;
 }
