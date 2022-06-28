@@ -308,41 +308,35 @@
 		    <th>접속IP</th>
 		    <th>답글</th>
 		  </tr>
-		  <c:forEach var="replyVo" items="${replyVos}" varStatus="st">
-		    <c:if test="${!empty replyVo.hostIp}">
-			    <tr>
-			      <td class="text-left">
-			        <c:if test="${replyVo.level <= 0}">		<!-- 부모댓글의 경우는 들여쓰지 하지 않는다. -->
-				        ${replyVo.nickName}
-			        </c:if>
-			        <c:if test="${replyVo.level > 0}">		<!-- 부모댓글의 경우는 들여쓰지 하지 않는다. -->
-			          <c:forEach var="i" begin="1" end="${replyVo.level}">&nbsp;&nbsp; </c:forEach>
-				        └ ${replyVo.nickName}
-			        </c:if>
-			        <c:if test="${sMid == replyVo.mid || sLevel == 0}">
-			          <a href="javascript:replyDelCheck(${replyVo.idx})" title="삭제하기"><span class="glyphicon glyphicon-remove"></span></a>
-			        </c:if>
-			      </td>
-			      <td class="text-left">
-			        ${fn:replace(replyVo.content,newLine,"<br/>")}
-			      </td>
-			      <td>
-		          ${replyVo.WDate}
-			      </td>
-			      <td>${replyVo.hostIp}</td>
-			      <td>
-			        <input type="button" value="답글" onclick="insertReply('${replyVo.idx}','${replyVo.level}','${replyVo.levelOrder}','${replyVo.nickName}')" id="replyBoxOpenBtn${replyVo.idx}" class="btn btn-secondary btn-sm"/>
-			        <input type="button" value="닫기" onclick="closeReply('${replyVo.idx}')" id="replyBoxCloseBtn${replyVo.idx}" class="btn btn-info btn-sm" style="display:none;"/>
-			      </td>
-			    </tr>
-			    <tr>
-			      <td colspan="5" class="m-0 p-0" style="border-top:none;"><div id="replyBox${replyVo.idx}"></div></td>
-			    </tr>
-		    </c:if>
-		    <c:if test="${empty replyVo.hostIp and (!empty replyVos[st.count].level and (replyVos[st.index].level<replyVos[st.count].level))}">
-		      <td class="text-left"><span style='font-size:9px'>글이 삭제처리됨...</span></td>
-		      <td colspan="4"></td>
-		    </c:if>
+		  <c:forEach var="replyVo" items="${replyVos}">
+		    <tr>
+		      <td class="text-left">
+		        <c:if test="${replyVo.level <= 0}">		<!-- 부모댓글의 경우는 들여쓰지 하지 않는다. -->
+			        ${replyVo.nickName}
+		        </c:if>
+		        <c:if test="${replyVo.level > 0}">		<!-- 부모댓글의 경우는 들여쓰지 하지 않는다. -->
+		          <c:forEach var="i" begin="1" end="${replyVo.level}">&nbsp;&nbsp; </c:forEach>
+			        └ ${replyVo.nickName}
+		        </c:if>
+		        <c:if test="${sMid == replyVo.mid || sLevel == 0}">
+		          <a href="javascript:replyDelCheck(${replyVo.idx})" title="삭제하기"><span class="glyphicon glyphicon-remove"></span></a>
+		        </c:if>
+		      </td>
+		      <td class="text-left">
+		        ${fn:replace(replyVo.content,newLine,"<br/>")}
+		      </td>
+		      <td>
+	          ${replyVo.WDate}
+		      </td>
+		      <td>${replyVo.hostIp}</td>
+		      <td>
+		        <input type="button" value="답글" onclick="insertReply('${replyVo.idx}','${replyVo.level}','${replyVo.levelOrder}','${replyVo.nickName}')" id="replyBoxOpenBtn${replyVo.idx}" class="btn btn-secondary btn-sm"/>
+		        <input type="button" value="닫기" onclick="closeReply('${replyVo.idx}')" id="replyBoxCloseBtn${replyVo.idx}" class="btn btn-info btn-sm" style="display:none;"/>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="5" class="m-0 p-0" style="border-top:none;"><div id="replyBox${replyVo.idx}"></div></td>
+		    </tr>
 		  </c:forEach>
 		</table>
 	</div>

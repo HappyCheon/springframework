@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.javagreenS.dao.BoardDAO">
+
   <select id="totRecCnt" resultType="int">
     select count(*) from board2;
   </select>
@@ -10,7 +11,7 @@
   </select>
   
   <select id="getBoardList" resultType="com.spring.javagreenS.vo.BoardVO">
-    select *, cast(TIMESTAMPDIFF(MINUTE, wDate, NOW()) / 60 as signed integer) AS diffTime  from board2 order by idx desc limit #{startIndexNo},#{pageSize};
+    select *, (select count(*) from boardReply2 where boardIdx=bb.idx) as replyCount, cast(TIMESTAMPDIFF(MINUTE, wDate, NOW()) / 60 as signed integer) AS diffTime  from board2 as bb order by idx desc limit #{startIndexNo},#{pageSize};
   </select>
   
   <select id="getBoardSearch" resultType="com.spring.javagreenS.vo.BoardVO">
@@ -20,8 +21,9 @@
   <select id="getBoardContent" resultType="com.spring.javagreenS.vo.BoardVO">
     select * from board2 where idx = #{idx};
   </select>
-  
+
   <!-- <![CDATA[idx > 5]]> -->
+
   <select id="getPreNext" resultType="com.spring.javagreenS.vo.BoardVO">
     select idx,title from board2 where  idx in (
       (select idx from board2 where <![CDATA[idx < #{idx}]]> order by idx desc limit 1),
@@ -32,10 +34,28 @@
     select min(idx) from board2;
   </select>
   
+  <select id="maxLevelOrder" resultType="String">
+    select max(levelOrder) from boardReply2 where boardIdx = #{boardIdx};
+  </select>
+  
+  <select id="getBoardReply" resultType="com.spring.javagreenS.vo.BoardReplyVO">
+    select * from boardReply2 where boardIdx = #{idx} order by levelOrder;
+  </select>
+  
+  
   
   <insert id="setBoardInput">
     insert into board2 values (default,#{vo.nickName},#{vo.title},#{vo.email},#{vo.homePage},#{vo.content},default,default,#{vo.hostIp},default,#{vo.mid});
   </insert>
+  
+  <insert id="setBoardReplyInput">
+    insert into boardReply2 values (default,#{replyVo.boardIdx},#{replyVo.mid},#{replyVo.nickName},default,#{replyVo.hostIp},#{replyVo.content},default,#{replyVo.levelOrder});
+  </insert>
+  
+  <insert id="setBoardReplyInput2">
+    insert into boardReply2 values (default,#{replyVo.boardIdx},#{replyVo.mid},#{replyVo.nickName},default,#{replyVo.hostIp},#{replyVo.content},#{replyVo.level},#{replyVo.levelOrder});
+  </insert>
+
   
   
   <update id="setReadNum">
@@ -46,9 +66,21 @@
     update board2 set title=#{vo.title},email=#{vo.email},homePage=#{vo.homePage},content=#{vo.content},hostIp=#{vo.hostIp} where idx=#{vo.idx};
   </update>
   
+  <update id="levelOrderPlusUpdate">
+    update boardReply2 set levelOrder=levelOrder+1 where boardIdx=#{replyVo.boardIdx} and levelOrder>#{replyVo.levelOrder};
+  </update>
+  
+  <update id="setBoardReplyDeleteOk">
+    update boardReply2 set hostIp='' where idx = #{idx};
+  </update>
+  
   
   <delete id="setBoardDelete">
     delete from board2 where idx = #{idx};
   </delete>
-  
+  <!-- 
+  <delete id="setBoardReplyDeleteOk">
+    delete from boardReply2 where idx = #{idx};
+  </delete>
+   -->
 </mapper>

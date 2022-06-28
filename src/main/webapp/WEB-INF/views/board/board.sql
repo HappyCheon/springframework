@@ -79,13 +79,18 @@ create table boardReply2 (
   wDate    datetime default now(),		/* 댓글쓴 날짜 */
   hostIp   varchar(50) not null,			/* 댓글쓴 PC의 IP */
   content  text				 not null,			/* 댓글 내용 */
+  level    int  not null default 0,		/* 댓글레벨 - 부모댓글의 레벨은 0 */
+  levelOrder int not null default 0,	/* 댓글의 순서 - 부모댓글의 levelOrder은 0 */
   primary key(idx),										/* 주키(기본키)는 idx */
-  foreign key(boardIdx) references board(idx)	/* board테이블의 idx를 boardReply2테이블의 외래키(boardIdx)로 설정했다. */
-  on update cascade				/* 원본테이블에서의 주키의 변경에 영향을 받는다. */
-  on delete restrict			/* 원본테이블에서의 주키삭제 시키지 못하게 한다.(삭제시는 에러발생하고 원본키를 삭제하지 못함.) */
+  foreign key(boardIdx) references board2(idx)	/* board테이블의 idx를 boardReply2테이블의 외래키(boardIdx)로 설정했다. */
+  /* on update cascade				원본테이블에서의 주키의 변경에 영향을 받는다. */
+  /* on delete restrict			원본테이블에서의 주키삭제 시키지 못하게 한다.(삭제시는 에러발생하고 원본키를 삭제하지 못함.) */
 );
 
 drop table boardReply2;
+
+desc boardReply2;
+
 
 /* sub query
     : 쿼리안에 쿼리를 삽입시키는 방법(위치는 상황에 따라서 사용자가 지정해준다.) - select 문과 함께 사용..
