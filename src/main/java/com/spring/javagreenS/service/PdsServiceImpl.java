@@ -1,5 +1,6 @@
 package com.spring.javagreenS.service;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,5 +94,19 @@ public class PdsServiceImpl implements PdsService {
 	@Override
 	public PdsVO getPdsContent(int idx) {
 		return pdsDAO.getPdsContent(idx);
+	}
+
+	@Override
+	public void setPdsDelete(PdsVO vo) {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/pds/");
+		String[] fSNames = vo.getFSName().split("/");
+		
+		for(int i=0; i<fSNames.length; i++) {
+			String realPathFile = realPath + fSNames[i];
+			new File(realPathFile).delete();
+		}
+		
+		pdsDAO.setPdsDelete(vo.getIdx());
 	}
 }

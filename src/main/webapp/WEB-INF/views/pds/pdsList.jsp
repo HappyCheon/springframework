@@ -18,26 +18,8 @@
     	location.href = "${ctp}/pds/pdsList?part="+part;
     }
     
-    // 모달창을 이용하여 개별내용 상세보기
-    function modal_view(title,part,nickName,mid,fName,fDate,fSize,fSName) {
-    	let imgs = fSName.split("/");
-    	
-    	$("#myModal").on("show.bs.modal", function(e) {
-    		$(".modal-header #title").html(title);
-    		$(".modal-header #part").html(part);
-    		$(".modal-body #nickName").html(nickName);
-    		$(".modal-body #mid").html(mid);
-    		$(".modal-body #fName").html(fName);
-    		$(".modal-body #fDate").html(fDate);
-    		$(".modal-body #fSize").html(fSize);
-    		$(".modal-body #fSName").html(fSName);
-    		$(".modal-body #imgSrc").attr("src", 'data/pds/'+imgs[0]);
-    	});
-    }
-    
     // 다운로드 수 증가처리
     function downNumCheck(idx) {
-    	alert("idx : " + idx);
     	$.ajax({
     		type : "post",
     		url  : "${ctp}/pds/pdsDownNum",
@@ -51,34 +33,60 @@
     	});
     }
     
-    // 파일 삭제처리하기
-    function pdsDelCheck(idx,fSName) {
-    	let ans = confirm("자료파일을 삭제하시겠습니까?");
-    	if(!ans) return false;
+    // 동적폼을 이용한 비밀번호 박스 보여주기
+    function pdsDelCheckOpen(idx) {
+    	$(".deletePwd").slideUp(300);
+    	$(".delCheckOpenBtn").show();
+    	$(".delCheckCloseBtn").hide();
     	
-    	let pwd = prompt("비밀번호를 입력하세요?");
-    	let query = {
-    			idx : idx,
-    			fSName : fSName,
-    			pwd : pwd
+    	let str = '';
+    	str += '<div id="deletePwd'+idx+'" class="text-center deletePwd p-2">';
+    	str += '현자료의 비밀번호를 입력하세요 : ';
+    	str += '<input type="password" name="pwd" id="pwd'+idx+'" />&nbsp;';
+    	str += '<input type="button" value="비밀번호확인" onclick="pwdCheck('+idx+')"/>';
+    	str += '</div>';
+    	
+    	$("#delCheckOpenBtn"+idx).hide();
+    	$("#delCheckCloseBtn"+idx).show();
+    	$("#deleteForm"+idx).slideDown(300);
+    	$("#deleteForm"+idx).html(str);
+    }
+    
+    // 비밀번호 확인처리(확인처리후 자료파일 삭제처리수행...)
+    function pwdCheck(idx) {
+    	let pwd = $("#pwd"+idx).val();
+    	if(pwd.trim() == "") {
+    		alert("비밀번호를 입력하세요!");
+    		$("#pwd"+idx).focus();
+    		return false;
     	}
     	$.ajax({
     		type : "post",
-    		url  : "${ctp}/pdsDelete.pds",
-    		data : query,
-    		success:function(data) {
-    			if(data == 'pdsDeleteOk') {
+    		url  : "${ctp}/pds/pdsPwdCheck",
+    		data : {
+    			idx : idx,
+    			pwd : pwd
+    		},
+    		success:function(res) {
+    			if(res != "1") {
+    				alert("비밀번호가 틀립니다.");
+    				$("#pwd"+idx).focus();
+    			}
+    			else {
     				alert("삭제 되었습니다.");
     				location.reload();
     			}
-    			else {
-    				alert("삭제 실패~~");
-    			}
     		},
     		error : function() {
-    			alert("전송 오류~~");
+    			alert("전송오류!!!");
     		}
     	});
+    }
+    
+    function pdsDelCheckClose(idx) {
+    	$("#delCheckOpenBtn"+idx).show();
+    	$("#delCheckCloseBtn"+idx).hide();
+    	$("#deleteForm"+idx).slideUp(300);
     }
     
     function newWindow(idx) {
@@ -153,12 +161,13 @@
         <td>${vo.downNum}</td>
         <td>
           <c:if test="${sMid == vo.mid || sLevel == 0}">
-          	<a href="${ctp}/pds/pdsTotalDown?idx=${vo.idx}" class="btn btn-primary btn-sm">전체다운</a>
-          	<a href="javascript:pdsDelCheck('${vo.idx}','${vo.FSName}')" class="btn btn-danger btn-sm">삭제</a>
-          	<a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myPwdModal" onclick="modalPwdView('${vo.idx}','${vo.FSName}');">삭제2</a>
+          	<a href="${ctp}/pds/pdsTotalDown?idx=${vo.idx}&fName=${vo.FName}&fSName=${vo.FSName}&title=${vo.title}" class="btn btn-primary btn-sm">전체다운</a>
+          	<a href="javascript:pdsDelCheckOpen(${vo.idx})" id="delCheckOpenBtn${vo.idx}" class="btn btn-danger btn-sm delCheckOpenBtn">삭제</a>
+          	<a href="javascript:pdsDelCheckClose(${vo.idx})" id="delCheckCloseBtn${vo.idx}" class="btn btn-info btn-sm delCheckCloseBtn" style="display:none">닫기</a>
           </c:if>
         </td>
       </tr>
+      <tr><td colspan="8" class="p-0"><div id="deleteForm${vo.idx}"></div></td></tr>
       <c:set var="curScrStartNo" value="${curScrStartNo - 1}"/>
     </c:forEach>
     <tr><td colspan="8" class="p-0"></td></tr>

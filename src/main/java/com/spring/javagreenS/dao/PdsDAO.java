@@ -18,4 +18,6 @@ public interface PdsDAO {
 
 	public PdsVO getPdsContent(@Param("idx") int idx);
 
+	public void setPdsDelete(@Param("idx") int idx);
+
 }

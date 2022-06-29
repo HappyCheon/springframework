@@ -33,4 +33,9 @@
     update pds2 set downNum = downNum + 1 where idx = #{idx};
   </update>
   
+  
+  <delete id="setPdsDelete">
+    delete from pds2 where idx = #{idx};
+  </delete>
+  
 </mapper>
