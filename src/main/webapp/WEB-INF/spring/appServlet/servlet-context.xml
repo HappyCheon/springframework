@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:beans="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -20,6 +20,8 @@
 	<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
 	<resources mapping="/data/ckeditor/**" location="/resources/data/ckeditor/" />
 	<resources mapping="/pds/**" location="/resources/data/pds/" />
+	<resources mapping="/data/dbShop/**" location="/resources/data/dbShop/" />
+	<resources mapping="/dbShop/product/**" location="/resources/data/dbShop/product/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -58,6 +60,8 @@
       <exclude-mapping path="/member/nickNameCheck"/>
       <exclude-mapping path="/member/memIdPwdSearch"/>
       <exclude-mapping path="/member/memIdPwdSearchOk"/>
+      <exclude-mapping path="/kakao/kakaoMain"/>
+      <exclude-mapping path="/member/memKakaoLogin"/>
       <!-- <exclude-mapping path="/member/memList"/> -->
       <beans:ref bean="memberInterceptor"/>
     </interceptor>
@@ -66,6 +70,7 @@
       <mapping path="/member/memList"/>
       <mapping path="/pds/pdsDownload"/>
       <mapping path="/pds/pdsInfor"/>
+      <mapping path="/dbShop/**"/>    <!-- 쇼핑몰도 정회원 이상만 사용할 수 있게 처리한다. -->
       <exclude-mapping path="/board/boardList"/>
       <beans:ref bean="boardInterceptor"/>
     </interceptor>
@@ -76,8 +81,9 @@
       <exclude-mapping path="/pds/pdsInfor"/>
       <beans:ref bean="pdsInterceptor"/>
     </interceptor>
-    
   </interceptors>
   
+  <!-- 트랜젝션을 어노테이션으로 처리하기위해 클래스를 등록해준다. -->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
   
 </beans:beans>

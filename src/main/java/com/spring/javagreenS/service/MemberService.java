@@ -28,4 +28,6 @@ public interface MemberService {
 
 	public int totRecCnt();
 
+	public MemberVO getMemEmailCheck(String email);
+
 }

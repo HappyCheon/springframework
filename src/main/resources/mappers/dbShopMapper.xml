@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS.dao.DbShopDAO">
+  <select id="getCategoryMain" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from categoryMain2 order by categoryMainCode desc;
+  </select>
+  
+  <select id="getCategoryMiddle" resultType="com.spring.javagreenS.vo.DbProductVO">
+    SELECT middle.*,main.categoryMainName AS categoryMainName
+      FROM categoryMiddle2 middle, categoryMain2 main WHERE middle.categoryMainCode=main.categoryMainCode
+      ORDER BY middle.categoryMiddleCode desc;
+  </select>
+  
+  <select id="getCategorySub" resultType="com.spring.javagreenS.vo.DbProductVO">
+    SELECT sub.*,main.categoryMainName as categoryMainName,middle.categoryMiddleName as categoryMiddleName
+      FROM categorySub2 sub, categoryMiddle2 middle, categoryMain2 main WHERE sub.categoryMiddleCode=middle.categoryMiddleCode and sub.categoryMainCode=main.categoryMainCode
+      ORDER BY sub.categorySubCode desc;
+  </select>
+   
+  <select id="getCategoryMainOne" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from categoryMain2 where categoryMainCode = #{categoryMainCode} or categoryMainName = #{categoryMainName}; <!-- 대분류 등록시에 먼저 체크해야할 사항 -->
+  </select>
+  
+  <select id="getCategoryMiddleOne" resultType="com.spring.javagreenS.vo.DbProductVO">
+    <if test="vo.categoryMiddleCode == null or vo.categoryMiddleCode.equals('')">   
+      select * from categoryMiddle2 where categoryMainCode = #{vo.categoryMainCode};  <!-- 대분류 삭제시에 먼저 체크할 사항 -->
+    </if>
+    <if test="vo.categoryMiddleCode != null and !vo.categoryMiddleCode.equals('')"> 
+      select * from categoryMiddle2 where categoryMiddleCode = #{vo.categoryMiddleCode} or (categoryMainCode = #{vo.categoryMainCode} and categoryMiddleName = #{vo.categoryMiddleName}); <!-- 중분류 등록시에 먼저 체크할 사항 -->
+    </if>
+  </select>
+  
+  <select id="getCategorySubOne" resultType="com.spring.javagreenS.vo.DbProductVO">
+    <if test="vo.categorySubCode == null or vo.categorySubCode.equals('')">
+      select * from categorySub2 where categoryMiddleCode = #{vo.categoryMiddleCode}; <!-- 중분류 삭제전에 소분류에 중분류항목이 있는지 검색처리 -->
+    </if>
+    <if test="vo.categorySubCode != null and !vo.categorySubCode.equals('')">
+      select * from categorySub2 where categorySubCode = #{vo.categorySubCode} or 
+        (categoryMainCode = #{vo.categoryMainCode} and categoryMiddleCode = #{vo.categoryMiddleCode} and categorySubName = #{vo.categorySubName});  <!-- 소분류등록전에 같은이름의 소분류항목이 있는지 체크하기위함 -->
+    </if>
+  </select>
+  
+  <select id="getDbProductOne" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from dbProduct2 where substring(productCode,4,3) = #{categorySubCode}; <!-- 상품코드:A0100125 -->
+  </select>
+  
+  <select id="getCategoryMiddleName" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from categoryMiddle2 where categoryMainCode = #{categoryMainCode};
+  </select>
+  
+  <select id="getCategorySubName" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from categorySub2 where categoryMainCode = #{categoryMainCode} and categoryMiddleCode = #{categoryMiddleCode};
+  </select>
+  
+  <select id="getProductMaxIdx" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from dbProduct2 order by idx desc limit 1;
+  </select>
+  
+  <select id="getProductName" resultType="String">
+    select productName from dbProduct2 order by productName;
+  </select>
+  
+  <select id="getDbShopList" resultType="com.spring.javagreenS.vo.DbProductVO">
+    <if test="part == '전체'">
+      select * from dbProduct2 order by idx desc;
+    </if>
+    <if test="part != '전체'">
+      select product.*,sub.categorySubName from dbProduct2 product,categorySub2 sub where sub.categorySubName = #{part} and substring(product.productCode,4,3) = sub.categorySubCode order by idx desc;
+    </if>
+  </select>
+  
+  <select id="getProductInfor" resultType="com.spring.javagreenS.vo.DbProductVO">
+    SELECT product.*, main.categoryMainName, middle.categoryMiddleName, sub.categorySubName
+      FROM dbProduct2 product, categoryMain2 main, categoryMiddle2 middle, categorySub2 sub 
+      WHERE productName=#{productName} ORDER BY idx DESC LIMIT 1;
+  </select>
+  
+  <select id="getOptionSame" resultType="int">
+    select count(*) from dbOption2 where productIdx=#{productIdx} and optionName=#{optionName};
+  </select>
+  
+  <select id="getOptionList" resultType="com.spring.javagreenS.vo.DbOptionVO">
+    select * from dbOption2 where productIdx=#{productIdx} order by optionName;
+  </select>
+  
+  <select id="getSubTitle" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select categorySubName from categorySub2 group by categorySubName order by categorySubName;
+  </select>
+  
+  <select id="getDbShopProduct" resultType="com.spring.javagreenS.vo.DbProductVO">
+    select * from dbProduct2 where idx = #{idx};
+  </select>
+  
+  <select id="getDbShopOption" resultType="com.spring.javagreenS.vo.DbOptionVO">
+    select * from dbOption2 where productIdx = #{productIdx} order by idx;
+  </select>
+  
+  <select id="getDbCartListProductOptionSearch" resultType="com.spring.javagreenS.vo.DbCartListVO">
+    select * from dbCartList2 where productName=#{productName} and optionName=#{optionName} and mid = #{mid};
+  </select>
+  
+  <select id="getDbCartList" resultType="com.spring.javagreenS.vo.DbCartListVO">
+    select * from dbCartList2 where mid = #{mid} order by idx;
+  </select>
+  
+  <select id="getCartIdx" resultType="com.spring.javagreenS.vo.DbCartListVO">
+    select * from dbCartList2 where idx = #{idx};
+  </select>
+  
+  <select id="getOrderMaxIdx" resultType="com.spring.javagreenS.vo.DbOrderVO">
+    select max(idx) as maxIdx from dbOrder2;
+  </select>
+  
+  <select id="getOrderOIdx" resultType="int">
+    select max(idx) from dbOrder2 where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="getBaesong" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    select * from dbBaesong where mid = #{mid};
+  </select>
+  
+  <select id="getOrderBaesong" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    select * from dbBaesong where orderIdx = #{orderIdx};
+  </select>
+  
+  
+  
+  <insert id="setCategoryMainInput">
+    insert into categoryMain2 value (#{vo.categoryMainCode},#{vo.categoryMainName});
+  </insert>
+  
+  <insert id="setCategoryMiddleInput">
+    insert into categoryMiddle2 value (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categoryMiddleName});
+  </insert>
+  
+  <insert id="setCategorySubInput">
+    insert into categorySub2 value (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categorySubCode},#{vo.categorySubName});
+  </insert>
+  
+  <insert id="setDbProductInput">
+    insert into dbProduct2 value (#{vo.idx},#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categorySubCode},#{vo.productCode},#{vo.productName},#{vo.detail},#{vo.mainPrice},#{vo.fName},#{vo.fSName},#{vo.content});
+  </insert>
+  
+  <insert id="setDbOptionInput">
+    insert into dbOption2 values (default,#{vo.productIdx},#{vo.optionName},#{vo.optionPrice});
+  </insert>
+  
+  <insert id="dbShopCartInput">
+    insert into dbCartList2 values (default,default,#{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionIdx},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbOrder">
+    insert into dbOrder2 values (default,#{vo.orderIdx},#{vo.mid},#{vo.productIdx},default,#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbBaesong">
+    insert into dbBaesong2 values (default,#{baesongVo.oIdx},#{baesongVo.orderIdx},#{baesongVo.orderTotalPrice},#{baesongVo.mid},#{baesongVo.name},#{baesongVo.address},#{baesongVo.tel},#{baesongVo.message},#{baesongVo.payment},#{baesongVo.payMethod},default);
+  </insert>
+  
+  
+  
+  <update id="dbShopCartUpdate">
+    update dbCartList2 set optionNum=#{vo.optionNum},totalPrice=totalPrice+#{vo.totalPrice} where productName=#{vo.productName} and optionName=#{vo.optionName};
+  </update>
+  
+  <update id="setMemberPointPlus">
+    update member2 set point = point + #{point} where mid = #{mid};
+  </update>
+  
+  
+  
+  
+  <delete id="delCategoryMain">
+    delete from categoryMain2 where categoryMainCode = #{categoryMainCode}
+  </delete>
+  
+  <delete id="delCategoryMiddle">
+    delete from categoryMiddle2 where categoryMiddleCode = #{categoryMiddleCode}
+  </delete>
+  
+  <delete id="delCategorySub">
+    delete from categorySub2 where categorySubCode = #{categorySubCode}
+  </delete>
+  
+  <delete id="setOptionDelete">
+    delete from dbOption2 where idx = #{idx}
+  </delete>
+  
+  <delete id="dbCartDelete">
+    delete from dbCartList2 where idx = #{idx};
+  </delete>
+  
+  <delete id="dbCartDeleteAll">
+    delete from dbCartList2 where idx = #{cartIdx};
+  </delete>
+  
+</mapper>

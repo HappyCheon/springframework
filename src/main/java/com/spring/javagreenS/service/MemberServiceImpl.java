@@ -141,4 +141,9 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<MemberVO> getMemList(int startIndexNo, int pageSize) {
 		return memberDAO.getMemList(startIndexNo, pageSize);
 	}
+
+	@Override
+	public MemberVO getMemEmailCheck(String email) {
+		return memberDAO.getMemEmailCheck(email);
+	}
 }

@@ -56,4 +56,10 @@ public class HomeController {
 		out.flush();
 		outStr.close();
 	}
+	
+	// error처리를 위한 페이지 불러오기설정
+	@RequestMapping(value="/error/error500", method = RequestMethod.POST)
+	public String error500Post() {
+		return "error/error500";
+	}
 }

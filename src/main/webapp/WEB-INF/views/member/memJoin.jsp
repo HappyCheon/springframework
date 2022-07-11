@@ -242,6 +242,7 @@
 				  <input type="text" class="form-control" placeholder="Email을 입력하세요." id="email1" name="email1" required />
 				  <div class="input-group-append">
 				    <select name="email2" class="custom-select">
+					    <option value="kakao.com" selected>kakao.com</option>
 					    <option value="naver.com" selected>naver.com</option>
 					    <option value="hanmail.net">hanmail.net</option>
 					    <option value="hotmail.com">hotmail.com</option>

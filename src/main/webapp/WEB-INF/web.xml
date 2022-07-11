@@ -44,4 +44,11 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!-- 에러발생시 에러페이지로 안내한다. -->
+  <!-- 
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error/error500</location>
+  </error-page>
+   -->
 </web-app>

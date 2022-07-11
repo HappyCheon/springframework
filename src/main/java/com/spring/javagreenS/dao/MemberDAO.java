@@ -28,4 +28,6 @@ public interface MemberDAO {
 
 	public int totRecCnt();
 
+	public MemberVO getMemEmailCheck(@Param("email") String email);
+
 }

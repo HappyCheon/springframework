@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -18,13 +19,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.common.ARIAUtil;
 import com.spring.javagreenS.service.StudyService;
+import com.spring.javagreenS.vo.KakaoAddressVO;
 import com.spring.javagreenS.vo.MailVO;
 import com.spring.javagreenS.vo.OperatorVO;
+import com.spring.javagreenS.vo.PersonVO;
 
 @Controller
 @RequestMapping("/study")
@@ -336,6 +340,89 @@ public class StudyController {
 		else {
 			return "redirect:/msg/fileUploadNo";
 		}
+	}
+	
+	// 트랜잭션 연습을위한 person폼 불러오기
+	@RequestMapping(value = "/personInput", method = RequestMethod.GET)
+	public String personInputGet() {
+		return "study/transaction/personInput";
+	}
+	
+	// 트랜잭션 정보 저장하기
+	@RequestMapping(value = "/personInput", method = RequestMethod.POST)
+	public String personInputPost(PersonVO vo) {
+		studyService.setPersonInput(vo);
+		
+		return "redirect:/msg/personInputOk";
+	}
+	
+	// 트랜잭션 연습을위한 리스트 person 불러오기
+	@RequestMapping(value = "/personList", method = RequestMethod.GET)
+	public String personListGet(Model model) {
+		ArrayList<PersonVO> vos = studyService.getPersonList();
+		model.addAttribute("vos", vos);
+		
+		return "study/transaction/personList";
+	}
+	
+  // 달력내역 가져오기
+	@RequestMapping(value="/calendar", method=RequestMethod.GET)
+	public String calendarGet() {
+		studyService.getCalendar();
+		return "study/calendar/calendar";
+	}
+	
+	// 카카오맵 사용하기
+	@RequestMapping(value="/kakaomap", method=RequestMethod.GET)
+	public String kakaomapGet() {
+		return "study/kakaomap/kakaomap";
+	}
+	
+	// 카카오맵 응용하기1
+	@RequestMapping(value="/kakaoEx1", method=RequestMethod.GET)
+	public String kakaoEx1Get() {
+		return "study/kakaomap/kakaoEx1";
+	}
+	
+	// 카카오맵 응용하기1-2
+	@ResponseBody
+	@RequestMapping(value="/kakaoEx1", method=RequestMethod.POST)
+	public String kakaoEx1Post(KakaoAddressVO vo) {
+		KakaoAddressVO searchVo= studyService.getAddressName(vo.getAddress());
+		if(searchVo != null) return "0";
+		studyService.setAddressName(vo);
+		
+		return "1";
+	}
+	
+	// 카카오맵 응용하기2
+	@RequestMapping(value="/kakaoEx2", method=RequestMethod.GET)
+	public String kakaoEx2Get(Model model,
+			@RequestParam(name="address", defaultValue = "사창사거리", required = false)  String address) {
+		List<KakaoAddressVO> vos = studyService.getAddressNameList();
+		KakaoAddressVO vo = studyService.getAddressName(address);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("vo", vo);
+		model.addAttribute("address", address);
+		
+		return "study/kakaomap/kakaoEx2";
+	}
+	
+	// 카카오맵 응용2-2(지점명 DB에서 삭제하기)
+	@ResponseBody
+	@RequestMapping(value = "/kakaoEx2Delete", method = RequestMethod.POST)
+	public String kakaoEx2DeleteGet(String address) {
+		studyService.kakaoEx2Delete(address);
+		return "";
+	}
+	
+	// 카카오맵 응용하기3
+	@RequestMapping(value="/kakaoEx3", method=RequestMethod.GET)
+	public String kakaoEx3Get(Model model, String address) {
+		if(address == null) address = "사창사거리";
+		model.addAttribute("address", address);
+		return "study/kakaomap/kakaoEx3";
 	}
 	
 }

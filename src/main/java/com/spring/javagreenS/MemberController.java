@@ -117,6 +117,41 @@ public class MemberController {
 		}
 	}
 	
+	// 로그인 인증처리2(카카오로그인 인증처리)
+	@RequestMapping(value = "/memKakaoLogin", method = RequestMethod.GET)
+	public String memKakaoLoginGet(
+			Model model,
+			String email,
+			HttpSession session) {
+		
+		MemberVO vo = memberService.getMemEmailCheck(email);
+		
+		if(vo != null && vo.getUserDel().equals("NO")) {
+			// 회원 인증처리된경우에 수행할 내용들을 기술한다.(session에 저장할자료 처리, 쿠키값처리...)
+			String strLevel = "";
+			if(vo.getLevel() == 0) strLevel = "관리자";
+			else if(vo.getLevel() == 1) strLevel = "운영자";
+			else if(vo.getLevel() == 2) strLevel = "우수회원";
+			else if(vo.getLevel() == 3) strLevel = "정회원";
+			else if(vo.getLevel() == 4) strLevel = "준회원";
+			
+			session.setAttribute("sMid", vo.getMid());
+			session.setAttribute("sNickName", vo.getNickName());
+			session.setAttribute("sLevel", vo.getLevel());
+			session.setAttribute("sStrLevel", strLevel);
+			
+			// 방문횟수(오늘방문횟수) 누적하기(최종 접속일/방문포인트 처리) - service객체에서 처리하자....
+			memberService.setMemberVisitProcess(vo);
+			
+			model.addAttribute("mid", vo.getMid());
+			//redirect.addAttribute("mid", mid);	// RedirectAttributes객체가 선언된 상태에서 model로 값을 넘길때는 값이 넘어가지 않는다.
+			return "redirect:/msg/memLoginOk";
+		}
+		else {
+			return "redirect:/msg/memLoginNo";
+		}
+	}
+	
 	@RequestMapping(value = "/memLogout", method = RequestMethod.GET)
 	public String memLogout(HttpSession session, Model model) {
 		String mid = (String) session.getAttribute("sMid");

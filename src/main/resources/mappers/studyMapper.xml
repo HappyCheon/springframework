@@ -17,12 +17,38 @@
     select * from operator2 where oid like concat('%',#{oid},'%') order by oid;
   </select>
   
+  <select id="getPersonList" resultType="com.spring.javagreenS.vo.PersonVO">
+    select p1.*, p2.* from person p1, personDetail p2 where p1.mid=p2.mid order by idx desc;
+  </select>
+  
+  <select id="getAddressName" resultType="com.spring.javagreenS.vo.KakaoAddressVO">
+    select * from kakaoAddress where address = #{address};
+  </select>
+  
+  <select id="getAddressNameList" resultType="com.spring.javagreenS.vo.KakaoAddressVO">
+    select * from kakaoAddress order by address;
+  </select>
+
+  
   <insert id="setOperatorInputOk">
     insert into operator2 values (#{vo.oid}, #{vo.pwd}, #{vo.name}, #{vo.keyIdx});
   </insert>
   
+  <insert id="setPersonInput">
+    insert into person values (default, #{vo.mid}, #{vo.pwd});
+    insert into personDetail values (#{vo.mid}, #{vo.name}, #{vo.age}, #{vo.address});
+  </insert>
+  
+  <insert id="setAddressName">
+    insert into kakaoAddress values (#{vo.address},#{vo.latitude},#{vo.longitude});
+  </insert>
+  
   <delete id="setOperatorDelete">
     delete from operator2 where oid = #{oid};
+  </delete>
+  
+  <delete id="kakaoEx2Delete">
+    delete from kakaoAddress where address = #{address};
   </delete>
   
 </mapper>

@@ -133,6 +133,34 @@ public class MessageController {
 			model.addAttribute("msg", "자료파일이 등록 되었습니다.");
 			model.addAttribute("url", "pds/pdsList");
 		}
+		else if(msgFlag.equals("personInputOk")) {
+			model.addAttribute("msg", "인적자원 정보가 등록 되었습니다.");
+			model.addAttribute("url", "study/personList");
+		}
+		else if(msgFlag.equals("sessionCartNo")) {
+			model.addAttribute("msg", "장바구니가 비어있습니다. 물건을 담아주세요.");
+			model.addAttribute("url", "sessionShop/shopList");
+		}
+		else if(msgFlag.equals("dbProductInputOk")) {
+			model.addAttribute("msg", "상품이 등록되었습니다.");
+			model.addAttribute("url", "dbShop/dbShopList");
+		}
+		else if(msgFlag.equals("dbOptionInputOk")) {
+			model.addAttribute("msg", "옵션항목이 등록되었습니다.");
+			model.addAttribute("url", "dbShop/dbOption");
+		}
+		else if(msgFlag.equals("cartEmpty")) {
+			model.addAttribute("msg", "장바구니가 비어있습니다.");
+			model.addAttribute("url", "dbShop/dbProductList");
+		}
+		else if(msgFlag.equals("cartInputOk")) {
+			model.addAttribute("msg", "장바구니에 상품이 담겼습니다.\\n다시 상품리스트창으로 갑니다.");
+			model.addAttribute("url", "dbShop/dbProductList");
+		}
+		else if(msgFlag.equals("cartOrderOk")) {
+			model.addAttribute("msg", "장바구니에 상품이 담겼습니다.\\n장바구니로 이동합니다.");
+			model.addAttribute("url", "dbShop/dbCartList");
+		}
 		
 		return "include/message";
 	}
