@@ -70,7 +70,7 @@
 <div class="container">
   <h2>결제처리 연습</h2>
   <hr/>
-  <p>현재 결제가 진행중입니다.</p>
+  <h3>현재 결제가 진행중입니다.</h3>
   <p><img src="${ctp}/images/m1.jpg" width="200px"/></p>
   <hr/>
 </div>

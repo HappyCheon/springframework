@@ -92,4 +92,16 @@ public interface DbShopService {
 
 	public List<DbBaesongVO> getOrderBaesong(String orderIdx);
 
+	public List<DbProductVO> getMyOrderList(int startIndexNo, int pageSize, String mid);
+
+	public List<DbBaesongVO> getMyOrderStatus(int startIndexNo, int pageSize, String mid, String startJumun, String endJumun,	String conditionOrderStatus);
+
+	public List<DbBaesongVO> getOrderStatus(String mid, String orderStatus, int startIndexNo, int pageSize);
+
+	public List<DbBaesongVO> getOrderCondition(String mid, int conditionDate, int startIndexNo, int pageSize);
+
+	public List<DbBaesongVO> getAdminOrderStatus(String startJumun, String endJumun, String orderStatus);
+
+	public void setOrderStatusUpdate(String orderIdx, String orderStatus);
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.javagreenS.vo.KakaoAreaVO;
+import com.spring.javagreenS.vo.ChartVO;
 import com.spring.javagreenS.vo.KakaoAddressVO;
 import com.spring.javagreenS.vo.OperatorVO;
 import com.spring.javagreenS.vo.PersonVO;
@@ -34,5 +36,13 @@ public interface StudyDAO {
 	public List<KakaoAddressVO> getAddressNameList();
 
 	public void kakaoEx2Delete(@Param("address") String address);
+
+	public String[] getAddress1();
+
+	public String[] getAddress2(@Param("address1") String address1);
+
+	public KakaoAreaVO getAddressSearch(@Param("address1") String address1, @Param("address2") String address2);
+
+	public List<ChartVO> getRecentlyVisitCount();
 
 }

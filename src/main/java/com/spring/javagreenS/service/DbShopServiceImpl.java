@@ -325,4 +325,35 @@ public class DbShopServiceImpl implements DbShopService {
 	public List<DbBaesongVO> getOrderBaesong(String orderIdx) {
 		return dbShopDAO.getOrderBaesong(orderIdx);
 	}
+
+	@Override
+	public List<DbProductVO> getMyOrderList(int startIndexNo, int pageSize, String mid) {
+		return dbShopDAO.getMyOrderList(startIndexNo, pageSize, mid);
+	}
+
+	@Override
+	public List<DbBaesongVO> getMyOrderStatus(int startIndexNo, int pageSize, String mid, String startJumun, String endJumun,	String conditionOrderStatus) {
+		return dbShopDAO.getMyOrderStatus(startIndexNo, pageSize, mid, startJumun, endJumun,	conditionOrderStatus);
+	}
+
+	@Override
+	public List<DbBaesongVO> getOrderStatus(String mid, String orderStatus, int startIndexNo, int pageSize) {
+		return dbShopDAO.getOrderStatus(mid, orderStatus, startIndexNo, pageSize);
+	}
+
+	@Override
+	public List<DbBaesongVO> getOrderCondition(String mid, int conditionDate, int startIndexNo, int pageSize) {
+		return dbShopDAO.getOrderCondition(mid, conditionDate, startIndexNo, pageSize);
+	}
+
+	@Override
+	public List<DbBaesongVO> getAdminOrderStatus(String startJumun, String endJumun, String orderStatus) {
+		//System.out.println("startJumun: " + startJumun + ", endJumun: " + endJumun + ", orderStatus : " + orderStatus);
+		return dbShopDAO.getAdminOrderStatus(startJumun, endJumun, orderStatus);
+	}
+
+	@Override
+	public void setOrderStatusUpdate(String orderIdx, String orderStatus) {
+		dbShopDAO.setOrderStatusUpdate(orderIdx, orderStatus);
+	}
 }

@@ -39,6 +39,8 @@
 				    <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='${ctp}/';">돌아가기</button> &nbsp;
 				    <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='${ctp}/member/memJoin';">회원가입</button> &nbsp;
           	<a href="https://kauth.kakao.com/oauth/authorize?client_id=ad8a95f25da4d209c0cad67cf5f6da01&redirect_uri=http://localhost:9090/javagreenS/kakao/kakaoMain&response_type=code">
+          	<!-- <a href="https://kauth.kakao.com/oauth/authorize?client_id=ad8a95f25da4d209c0cad67cf5f6da01&redirect_uri=http://192.168.50.20:9090/javagreenS/kakao/kakaoMain&response_type=code"> -->
+          	<!-- <a href="https://kauth.kakao.com/oauth/authorize?client_id=ad8a95f25da4d209c0cad67cf5f6da01&redirect_uri=http://49.142.157.251:9090/javagreenS/kakao/kakaoMain&response_type=code"> -->
           	  <img src="${ctp}/images/kakao_login_narrow.png" class="text-center" style="height:30px;"/>
           	</a>
           	<%-- 

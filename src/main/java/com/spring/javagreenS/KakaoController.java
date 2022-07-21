@@ -29,7 +29,6 @@ public class KakaoController {
   @ResponseBody
   @RequestMapping(value = "/kakaoMain", method = RequestMethod.GET)
   public ModelAndView kakaoMainGet(@RequestParam("code") String code, HttpSession session) {
-  	System.out.println("asdf" + code);
     ModelAndView mav = new ModelAndView();
     
     // 1. 인증코드 요청하여 전달받기
@@ -41,13 +40,18 @@ public class KakaoController {
     System.out.println("login infor : " + userInfor.toString());
     
     if(userInfor.get("email") != null) {
-//      session.setAttribute("nickname", userInfor.get("nickname"));
-//      session.setAttribute("email", userInfor.get("email"));
-      session.setAttribute("accessToken", accessToken);
+//      session.setAttribute("sNickName", userInfor.get("nickname"));
+      session.setAttribute("sEmail", userInfor.get("email"));
+//      session.setAttribute("accessToken", accessToken);
     }
+    else {		// 이메일이 null이라면 임의의 이메일을 등록시켜주었다. 
+      session.setAttribute("sEmail", "cjsk1126@naver.com");
+    }
+    session.setAttribute("sNickName", userInfor.get("nickname"));
+    session.setAttribute("accessToken", accessToken);
 //    mav.addObject("userId", userInfor.get("email"));
-    mav.addObject("nickname", userInfor.get("nickname"));
-    mav.addObject("email", userInfor.get("email"));
+//    mav.addObject("nickName", userInfor.get("nickname"));
+//    mav.addObject("email", userInfor.get("email"));
     mav.setViewName("/member/kakaoMain");
     return mav;
   }

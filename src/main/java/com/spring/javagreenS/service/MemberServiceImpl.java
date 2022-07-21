@@ -146,4 +146,39 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVO getMemEmailCheck(String email) {
 		return memberDAO.getMemEmailCheck(email);
 	}
+
+	@Override
+	public void setKakaoMemberInputOk(String mid, String pwd, String nickName, String email) {
+		memberDAO.setKakaoMemberInputOk(mid, pwd, nickName, email);
+	}
+
+	@Override
+	public String getTodayVisitDate() {
+		return memberDAO.getTodayVisitDate();
+	}
+
+	@Override
+	public void setTodayVisitCountInsert() {
+		memberDAO.setTodayVisitCountInsert();
+	}
+
+	@Override
+	public void setTodayVisitCountUpdate(String strToday) {
+		memberDAO.setTodayVisitCountUpdate(strToday);
+	}
+
+	@Override
+	public ArrayList<MemberVO> getAdminMemberLevelList(int startIndexNo, int pageSize, int level) {
+		return memberDAO.getAdminMemberLevelList(startIndexNo, pageSize, level);
+	}
+
+	@Override
+	public ArrayList<MemberVO> getAdminMemberMidList(int startIndexNo, int pageSize, String mid) {
+		return memberDAO.getAdminMemberMidList(startIndexNo, pageSize, mid);
+	}
+
+	@Override
+	public void setAdminLevelUpdate(int idx, int level) {
+		memberDAO.setAdminLevelUpdate(idx, level);
+	}
 }

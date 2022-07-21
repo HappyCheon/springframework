@@ -36,6 +36,8 @@
 	        <a href="${ctp}/study/personInput" class="w3-bar-item w3-button">트랜잭션연습</a>
 	        <a href="${ctp}/study/calendar" class="w3-bar-item w3-button">인터넷달력</a>
 	        <a href="${ctp}/study/kakaomap" class="w3-bar-item w3-button">카카오맵</a>
+	        <a href="${ctp}/study/googleChart" class="w3-bar-item w3-button">구글차트</a>
+	        <a href="${ctp}/study/googleChart2" class="w3-bar-item w3-button">구글차트2</a>
 	        <a href="${ctp}/sessionShop/shopList" class="w3-bar-item w3-button">세션장바구니</a>
 	        <a href="${ctp}/dbShop/dbCartList" class="w3-bar-item w3-button">DB장바구니</a>
 	      </div>
@@ -45,7 +47,7 @@
 	      <div class="w3-dropdown-content w3-bar-block w3-card-4">
 	        <a href="${ctp}/dbShop/dbProductList" class="w3-bar-item w3-button">상품리스트</a>
 	        <a href="${ctp}/dbShop/dbCartList" class="w3-bar-item w3-button">장바구니</a>
-	        <a href="${ctp}/dbShop/order" class="w3-bar-item w3-button">주문현황</a>
+	        <a href="${ctp}/dbShop/dbMyOrder" class="w3-bar-item w3-button">주문현황</a>
 	        <a href="${ctp}/shop/input/productMenu" class="w3-bar-item w3-button">상품등록연습</a>
 	      </div>
 	    </div>
@@ -53,6 +55,7 @@
 	      <button class="w3-padding-large w3-button" title="More">${sNickName} <i class="fa fa-caret-down"></i></button>     
 	      <div class="w3-dropdown-content w3-bar-block w3-card-4">
 	        <a href="${ctp}/member/memMain" class="w3-bar-item w3-button">회원메인</a>
+	        <a href="${ctp}/schedule/schedule" class="w3-bar-item w3-button">일정관리</a>
 	        <a href="${ctp}/member/memList" class="w3-bar-item w3-button">회원리스트</a>
 	        <a href="${ctp}/member/memPwdCheck" class="w3-bar-item w3-button">정보수정</a>
 	        <a href="javascript:memDeleteCheck()" class="w3-bar-item w3-button">회원탈퇴</a>

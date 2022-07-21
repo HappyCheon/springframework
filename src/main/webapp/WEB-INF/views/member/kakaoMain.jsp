@@ -1,3 +1,5 @@
+<!-- 메일화면을 만들지 않았을때 테스트로 다녀갈 jsp파일입니다. -->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,7 +10,7 @@
   <title>kakaoMain.jsp</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
   <script>
-    location.href = "${ctp}/member/memKakaoLogin?email=${email}";
+    location.href = "${ctp}/member/memKakaoLogin?nickName=${nickName}&mid=${email}";
   </script>
 </head>
 <body>

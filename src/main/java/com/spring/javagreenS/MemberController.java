@@ -1,6 +1,8 @@
 package com.spring.javagreenS;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -61,7 +63,7 @@ public class MemberController {
 		return "member/memLogin";
 	}
 	
-	// 로그인 인증처리
+	// 로그인 인증처리(일반 로그인시에 처리된다.)
 	@RequestMapping(value = "/memLogin", method = RequestMethod.POST)
 	public String memLoginPost(
 			Model model,
@@ -75,7 +77,7 @@ public class MemberController {
 		MemberVO vo = memberService.getMemIdCheck(mid);
 		
 		if(vo != null && passwordEncoder.matches(pwd, vo.getPwd()) && vo.getUserDel().equals("NO")) {
-			// 회원 인증처리된경우에 수행할 내용들을 기술한다.(session에 저장할자료 처리, 쿠키값처리...)
+			// 회원 인증처리된경우에 수행할 내용들을 기술한다.(session에 저장할자료 처리, 쿠키값처리, 그날 방문자수 1 더해주기...)
 			String strLevel = "";
 			if(vo.getLevel() == 0) strLevel = "관리자";
 			else if(vo.getLevel() == 1) strLevel = "운영자";
@@ -105,8 +107,21 @@ public class MemberController {
 				}
 			}
 			
-			// 방문횟수(오늘방문횟수) 누적하기(최종 접속일/방문포인트 처리) - service객체에서 처리하자....
+			// 로그인한 사용자의 방문횟수(오늘방문횟수) 누적하기(최종 접속일/방문포인트 처리) - service객체에서 처리하자....
 			memberService.setMemberVisitProcess(vo);
+			
+			// 오늘 총 사용자의 방문횟수를 누적한다.(오늘날짜로 첫 방문은 1이되고, 그렇지 않으면 기존의 오늘 날짜에 +1 시킨다.)
+			String visitDate = memberService.getTodayVisitDate();
+			Date today = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String strToday = sdf.format(today);
+			
+			if(!strToday.equals(visitDate)) {
+				memberService.setTodayVisitCountInsert();
+			}
+			else {
+				memberService.setTodayVisitCountUpdate(strToday);
+			}
 			
 			model.addAttribute("mid", mid);
 			//redirect.addAttribute("mid", mid);	// RedirectAttributes객체가 선언된 상태에서 model로 값을 넘길때는 값이 넘어가지 않는다.
@@ -118,11 +133,17 @@ public class MemberController {
 	}
 	
 	// 로그인 인증처리2(카카오로그인 인증처리)
+	// 카카오에서 인증처리가 되었다면 이곳은 그대로 로드인처리 시켜준다.
+	// 만약 이곳에 가입되어 있지 않다면, 카카오에서 넘어온 정보(여기선, 닉네임과 이메일)로 자동 회원가입시켜준다.
 	@RequestMapping(value = "/memKakaoLogin", method = RequestMethod.GET)
 	public String memKakaoLoginGet(
 			Model model,
-			String email,
+//			String nickName,
+//			String email,
 			HttpSession session) {
+//		if(email == null) email = (String) session.getAttribute("sEmail");
+		String email = (String) session.getAttribute("sEmail");
+		System.out.println("email : " + email);
 		
 		MemberVO vo = memberService.getMemEmailCheck(email);
 		
@@ -140,15 +161,41 @@ public class MemberController {
 			session.setAttribute("sLevel", vo.getLevel());
 			session.setAttribute("sStrLevel", strLevel);
 			
-			// 방문횟수(오늘방문횟수) 누적하기(최종 접속일/방문포인트 처리) - service객체에서 처리하자....
+			// 현재 로그인한 회원의 방문횟수(오늘방문횟수) 누적하기(최종 접속일/방문포인트 처리) - service객체에서 처리하자....
 			memberService.setMemberVisitProcess(vo);
+			
+  		// 오늘 총 사용자의 방문횟수를 누적한다.(오늘날짜로 첫 방문은 1이되고, 그렇지 않으면 기존의 오늘 날짜에 +1 시킨다.)
+			String visitDate = memberService.getTodayVisitDate();
+			Date today = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String strToday = sdf.format(today);
+			
+			if(!strToday.equals(visitDate)) {
+				memberService.setTodayVisitCountInsert();
+			}
+			else {
+				memberService.setTodayVisitCountUpdate(strToday);
+			}
 			
 			model.addAttribute("mid", vo.getMid());
 			//redirect.addAttribute("mid", mid);	// RedirectAttributes객체가 선언된 상태에서 model로 값을 넘길때는 값이 넘어가지 않는다.
 			return "redirect:/msg/memLoginOk";
 		}
-		else {
+		else if(vo != null && !vo.getUserDel().equals("NO")) {  // 탈퇴한 회원이라면 로그인 취소처리함.
 			return "redirect:/msg/memLoginNo";
+		}
+		else {	// 회원 가입되어 있지 않은 회원이라면 자동회원가입처리(닉네임과 이메일만으로 가입처리)한다. 아이디는 이메일앞쪽을 지정해준다.
+			String mid = email.substring(0,email.indexOf("@"));
+			String nickName = (String) session.getAttribute("sNickName");
+			// 비밀번호 암호화 처리
+			String pwd = (passwordEncoder.encode("0000"));
+			
+			// 자동 회원 가입시켜준다.
+			memberService.setKakaoMemberInputOk(mid,pwd,nickName,email);
+			
+			// 다시 로그인 인증으로 보낸다.
+			model.addAttribute("email", email);
+			return "redirect:/member/memKakaoLogin";
 		}
 	}
 	

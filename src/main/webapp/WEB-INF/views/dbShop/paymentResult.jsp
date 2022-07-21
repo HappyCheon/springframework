@@ -9,6 +9,12 @@
   <meta charset="UTF-8">
   <title>paymentResult.jsp</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
+  <script>
+	  function nWin(orderIdx) {
+	  	var url = "${contextPath}/dbShop/dbOrderBaesong?orderIdx="+orderIdx;
+	  	window.open(url,"dbOrderBaesong","width=350px,height=400px");
+	  }
+  </script>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/nav.jsp"/>
@@ -17,17 +23,17 @@
 <div class="container">
   <h2>결제내역</h2>
   <hr/>
-  <p>주문 물품명 : ${payMentVo.name}</p>
-  <p>주문금액 : ${payMentVo.amount}(실제구매금액:${orderTotalPrice})</p>
-  <p>주문자 메일주소 : ${payMentVo.buyer_email}</p>
-  <p>주문자 성명 : ${payMentVo.buyer_name}</p>
-  <p>주문자 전화번호 : ${payMentVo.buyer_tel}</p>
-  <p>주문자 주소 : ${payMentVo.buyer_addr}</p>
-  <p>주문자 우편번호 : ${payMentVo.buyer_postcode}</p>
-  <p>결제 고유ID : ${payMentVo.imp_uid}</p>
-  <p>결제 상점 거래 ID : ${payMentVo.merchant_uid}</p>
-  <p>결제 금액 : ${payMentVo.paid_amount}</p>
-  <p>카드 승인번호 : ${payMentVo.apply_num}</p>
+  <p>주문 물품명 : ${sPayMentVo.name}</p>
+  <p>주문금액 : ${sPayMentVo.amount}(실제구매금액:${orderTotalPrice})</p>
+  <p>주문자 메일주소 : ${sPayMentVo.buyer_email}</p>
+  <p>주문자 성명 : ${sPayMentVo.buyer_name}</p>
+  <p>주문자 전화번호 : ${sPayMentVo.buyer_tel}</p>
+  <p>주문자 주소 : ${sPayMentVo.buyer_addr}</p>
+  <p>주문자 우편번호 : ${sPayMentVo.buyer_postcode}</p>
+  <p>결제 고유ID : ${sPayMentVo.imp_uid}</p>
+  <p>결제 상점 거래 ID : ${sPayMentVo.merchant_uid}</p>
+  <p>결제 금액 : ${sPayMentVo.paid_amount}</p>
+  <p>카드 승인번호 : ${sPayMentVo.apply_num}</p>
   <hr/>
   <h2>주문완료</h2>
   <hr/>
@@ -38,7 +44,7 @@
       <th>주문내역</th>
       <th>비고</th>
     </tr>
-    <c:forEach var="vo" items="${orderVos}">
+    <c:forEach var="vo" items="${sOrderVos}">
       <tr>
         <td style="text-align:center;">
           <img src="${ctp}/dbShop/product/${vo.thumbImg}" width="100px"/>

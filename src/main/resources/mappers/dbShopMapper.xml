@@ -116,12 +116,120 @@
   </select>
   
   <select id="getBaesong" resultType="com.spring.javagreenS.vo.DbBaesongVO">
-    select * from dbBaesong where mid = #{mid};
+    select * from dbBaesong2 where mid = #{mid};
   </select>
   
   <select id="getOrderBaesong" resultType="com.spring.javagreenS.vo.DbBaesongVO">
-    select * from dbBaesong where orderIdx = #{orderIdx};
+    select * from dbBaesong2 where orderIdx = #{orderIdx};
   </select>
+  
+  <select id="totRecCnt" resultType="int">
+    <if test="part == '전체'">
+      select count(*) from dbOrder2;
+    </if>
+    <if test="part != '전체'">
+      <!-- select count(*) from dbOrder2 where mid = #{mid}; -->
+      select count(*) from dbBaesong2 where mid = #{part};
+    </if>
+  </select>
+  
+  <select id="totRecCntMyOrderStatus" resultType="int">
+    <if test="mid == '전체'">
+      SELECT count(*) from dbOrder2;
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus == '전체'">
+        SELECT count(*)
+        from dbOrder2 a join dbBaesong2 b using(orderIdx) 
+        <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="mid != '전체' and conditionOrderStatus != '전체'">
+        SELECT count(*)
+        from dbOrder2 a join dbBaesong2 b using(orderIdx) 
+        <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+  
+  <select id="getMyOrderList" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+      SELECT oder.*,baesong.* 
+      from dbOrder2 oder join dbBaesong2 baesong using(orderIdx) 
+      where baesong.mid=#{mid} and date(orderDate) = substring(now(),1,10)
+      order by baesong.idx desc 
+      limit #{startIndexNo},#{pageSize};
+  </select>
+  
+  <select id="getMyOrderStatus" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    <if test="conditionOrderStatus == '전체'">
+      SELECT o.*,b.* 
+      from dbOrder2 o join dbBaesong2 b using(orderIdx) 
+      <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) ]]> 
+      order by b.idx desc 
+      limit #{startIndexNo},#{pageSize};
+     </if>
+    <if test="conditionOrderStatus != '전체'">
+      SELECT o.*,b.* 
+      from dbOrder2 o join dbBaesong2 b using(orderIdx) 
+      <![CDATA[ where b.mid=#{mid} and date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{conditionOrderStatus} ]]> 
+      order by b.idx desc
+      limit #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="totRecCntStatus" resultType="int">
+    SELECT count(*)
+    from dbOrder2 a join dbBaesong2 b using(orderIdx) 
+    <![CDATA[ where b.mid=#{mid} and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+  </select>
+  
+  <select id="getOrderStatus" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    <if test="orderStatus == '전체'">
+      SELECT o.*,b.* 
+      FROM dbOrder2 o JOIN dbBaesong2 b USING(orderIdx) 
+      <![CDATA[ WHERE b.mid=#{mid} ]]> 
+      ORDER BY b.idx DESC
+      LIMIT #{startIndexNo},#{pageSize};
+    </if>
+    <if test="orderStatus != '전체'">
+      SELECT o.*,b.* 
+      FROM dbOrder2 o JOIN dbBaesong2 b USING(orderIdx) 
+      <![CDATA[ WHERE b.mid=#{mid} and b.orderStatus=#{orderStatus} ]]> 
+      ORDER BY b.idx DESC
+      LIMIT #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="totRecCntCondition" resultType="int">
+    SELECT count(*)
+    FROM dbOrder2 o JOIN dbBaesong2 b USING(orderIdx) 
+    <![CDATA[ WHERE b.mid=#{mid} AND date(orderDate) >= date(subdate(now(), INTERVAL #{conditionDate} DAY)) AND date(orderDate) <= date(now()) ]]>;
+  </select>
+  
+  <select id="getOrderCondition" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    SELECT a.*,b.* 
+    FROM dbOrder2 a join dbBaesong2 b using(orderIdx) 
+    <![CDATA[ WHERE b.mid=#{mid} and date(orderDate) >= date(subdate(now(), INTERVAL #{conditionDate} DAY)) and date(orderDate) <= date(now()) ]]> 
+    order by orderDate desc
+    limit #{startIndexNo},#{pageSize};
+  </select>
+  
+  <select id="totRecCntAdminStatus" resultType="int">
+    <if test="orderStatus == '전체'">
+      select count(*) from dbOrder2 a join dbBaesong2 b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="orderStatus != '전체'">
+      select count(*) from dbOrder2 a join dbBaesong2 b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+  
+  <select id="getAdminOrderStatus" resultType="com.spring.javagreenS.vo.DbBaesongVO">
+    <if test="orderStatus == '전체'">
+      select a.*,b.* from dbOrder2 a join dbBaesong2 b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) order by orderDate desc ]]>;
+    </if>
+    <if test="orderStatus != '전체'">
+      <!-- select a.*,b.* from dbOrder a join dbBaesong b using(orderIdx) <![CDATA[ where date(orderDate) >= date('2022-07-19') and date(orderDate) <= date('2022-07-19') and b.orderStatus='배송중' order by orderDate desc ]]>; -->
+      select a.*,b.* from dbOrder2 a join dbBaesong2 b using(orderIdx) <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and b.orderStatus=#{orderStatus} order by orderDate desc ]]>;
+    </if>
+  </select>
+  
   
   
   
@@ -165,6 +273,10 @@
   
   <update id="setMemberPointPlus">
     update member2 set point = point + #{point} where mid = #{mid};
+  </update>
+  
+  <update id="setOrderStatusUpdate">
+    update dbBaesong2 set orderStatus = #{orderStatus} where orderIdx = #{orderIdx};
   </update>
   
   

@@ -17,6 +17,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.dao.StudyDAO;
+import com.spring.javagreenS.vo.KakaoAreaVO;
+import com.spring.javagreenS.vo.ChartVO;
 import com.spring.javagreenS.vo.KakaoAddressVO;
 import com.spring.javagreenS.vo.OperatorVO;
 import com.spring.javagreenS.vo.PersonVO;
@@ -349,6 +351,26 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public void kakaoEx2Delete(String address) {
 		studyDAO.kakaoEx2Delete(address);
+	}
+
+	@Override
+	public String[] getAddress1() {
+		return studyDAO.getAddress1();
+	}
+
+	@Override
+	public String[] getAddress2(String address1) {
+		return studyDAO.getAddress2(address1);
+	}
+
+	@Override
+	public KakaoAreaVO getAddressSearch(String address1, String address2) {
+		return studyDAO.getAddressSearch(address1, address2);
+	}
+
+	@Override
+	public List<ChartVO> getRecentlyVisitCount() {
+		return studyDAO.getRecentlyVisitCount();
 	}
 
 }

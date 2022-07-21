@@ -94,7 +94,7 @@ public class MessageController {
 			model.addAttribute("url", "member/memMain");
 		}
 		else if(msgFlag.equals("memPwdCheckNo")) {
-			model.addAttribute("msg", "비밀번호를 확인하세요.");
+			model.addAttribute("msg", "비밀번호를 확인하세요.\\n카카오로그인시 가입된 초기비밀번호는 0000 입니다.\\n비밀번호를 변경해서 사용하세요");
 			model.addAttribute("url", "member/memPwdCheck");
 		}
 		else if(msgFlag.equals("memUpdateOk")) {
@@ -160,6 +160,14 @@ public class MessageController {
 		else if(msgFlag.equals("cartOrderOk")) {
 			model.addAttribute("msg", "장바구니에 상품이 담겼습니다.\\n장바구니로 이동합니다.");
 			model.addAttribute("url", "dbShop/dbCartList");
+		}
+//		else if(msgFlag.equals("memKakaoLoginOk")) {
+//			model.addAttribute("msg", mid+"님 로그인 되셨습니다.\\n아이디는 이메일 앞자리입니다.\\n임시비밀번호로 '0000'이 발급됩니다.");
+//			model.addAttribute("url", "member/memKakaoLogin?email="+mid);
+//		}
+		else if(msgFlag.equals("paymentResultOk")) {
+			model.addAttribute("msg", "결제가 정상적으로 완료되었습니다.");
+			model.addAttribute("url", "dbShop/paymentResult");
 		}
 		
 		return "include/message";

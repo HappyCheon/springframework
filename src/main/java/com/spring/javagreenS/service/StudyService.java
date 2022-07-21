@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.javagreenS.vo.KakaoAreaVO;
+import com.spring.javagreenS.vo.ChartVO;
 import com.spring.javagreenS.vo.KakaoAddressVO;
 import com.spring.javagreenS.vo.OperatorVO;
 import com.spring.javagreenS.vo.PersonVO;
@@ -42,5 +44,13 @@ public interface StudyService {
 	public List<KakaoAddressVO> getAddressNameList();
 
 	public void kakaoEx2Delete(String address);
+
+	public String[] getAddress1();
+
+	public String[] getAddress2(String address1);
+
+	public KakaoAreaVO getAddressSearch(String address1, String address2);
+
+	public List<ChartVO> getRecentlyVisitCount();
 
 }

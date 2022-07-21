@@ -92,4 +92,26 @@ public interface DbShopDAO {
 	public List<DbBaesongVO> getBaesong(@Param("mid") String mid);
 
 	public List<DbBaesongVO> getOrderBaesong(@Param("orderIdx") String orderIdx);
+	
+	public int totRecCnt(@Param("part") String part);
+
+	public List<DbProductVO> getMyOrderList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("mid") String mid);
+
+	public int totRecCntMyOrderStatus(@Param("mid") String mid, @Param("startJumun") String startJumun, @Param("endJumun") String endJumun, @Param("conditionOrderStatus") String conditionOrderStatus);
+
+	public List<DbBaesongVO> getMyOrderStatus(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("mid") String mid, @Param("startJumun") String startJumun, @Param("endJumun") String endJumun, @Param("conditionOrderStatus") String conditionOrderStatus);
+
+	public int totRecCntStatus(@Param("mid") String mid, @Param("orderStatus") String orderStatus);
+
+	public List<DbBaesongVO> getOrderStatus(@Param("mid") String mid, @Param("orderStatus") String orderStatus, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	public int totRecCntCondition(@Param("mid") String mid, @Param("conditionDate") int conditionDate);
+
+	public List<DbBaesongVO> getOrderCondition(@Param("mid") String mid, @Param("conditionDate") int conditionDate, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	public int totRecCntAdminStatus(@Param("startJumun") String startJumun, @Param("endJumun") String endJumun, @Param("orderStatus") String orderStatus);
+
+	public List<DbBaesongVO> getAdminOrderStatus(@Param("startJumun") String startJumun, @Param("endJumun") String endJumun, @Param("orderStatus") String orderStatus);
+
+	public void setOrderStatusUpdate(@Param("orderIdx") String orderIdx, @Param("orderStatus") String orderStatus);
 }

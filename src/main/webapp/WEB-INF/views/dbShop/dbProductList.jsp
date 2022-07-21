@@ -16,7 +16,7 @@
 <jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br/></p>
 <div class="container">
-  <span>[<a href="${ctp}/dbShop/dbShopList">전체보기</a>]</span> /
+  <span>[<a href="${ctp}/dbShop/dbProductList">전체보기</a>]</span> /
   <c:forEach var="subTitle" items="${subTitleVos}" varStatus="st">
   	<span>[<a href="${ctp}/dbShop/dbProductList?part=${subTitle.categorySubName}">${subTitle.categorySubName}</a>]</span>
 	  <c:if test="${!st.last}"> / </c:if>

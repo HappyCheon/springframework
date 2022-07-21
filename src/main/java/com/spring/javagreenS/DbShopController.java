@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.javagreenS.pagination.PageProcess;
+import com.spring.javagreenS.pagination.PageVO;
+import com.spring.javagreenS.service.AdminService;
 import com.spring.javagreenS.service.DbShopService;
 import com.spring.javagreenS.service.MemberService;
 import com.spring.javagreenS.vo.DbBaesongVO;
@@ -42,6 +46,12 @@ public class DbShopController {
 	
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	PageProcess pageProcess;
+	
+	@Autowired
+	AdminService adminService;
 	
 	// 모든 분류목록 출력하기(처음화면의 '대/중/소' 분류 등록및 조회 창 보여주기)
 	@RequestMapping(value="/dbCategory", method = RequestMethod.GET)
@@ -423,9 +433,10 @@ public class DbShopController {
 		List<DbOrderVO> orderVos = (List<DbOrderVO>) session.getAttribute("sOrderVos");
 		PayMentVO payMentVo = (PayMentVO) session.getAttribute("sPayMentVo");
 		DbBaesongVO baesongVo = (DbBaesongVO) session.getAttribute("sBaesongVo");
-		// 사용된 세션은 반환한다.
-		session.removeAttribute("sOrderVos");
-		session.removeAttribute("sPayMentVo");
+		
+//		사용된 세션은 반환한다.
+//		session.removeAttribute("sOrderVos");
+//		session.removeAttribute("sPayMentVo");
 		session.removeAttribute("sBaesongVo");
 		
 		for(DbOrderVO vo : orderVos) {
@@ -450,13 +461,16 @@ public class DbShopController {
 		payMentVo.setPaid_amount(receivePayMentVo.getPaid_amount());
 		payMentVo.setApply_num(receivePayMentVo.getApply_num());
 		
-		// 오늘 주문에 들어간 정보들을 확인해주기위해 다시 model에 담아서 넘겨주고 있다.
-		model.addAttribute("orderVos", orderVos);
-		model.addAttribute("payMentVo", payMentVo);
-		//model.addAttribute("baesongVo", baesongVo);
-		model.addAttribute("orderTotalPrice", baesongVo.getOrderTotalPrice());
+		// 오늘 주문에 들어간 정보들을 확인해주기위해 다시 session에 담아서 넘겨주고 있다.
+//		model.addAttribute("orderVos", orderVos);
+//		model.addAttribute("payMentVo", payMentVo);
+//		model.addAttribute("orderTotalPrice", baesongVo.getOrderTotalPrice());
+//		session.setAttribute("sOrderVos", orderVos);
+		session.setAttribute("sPayMentVo", payMentVo);
+		session.setAttribute("orderTotalPrice", baesongVo.getOrderTotalPrice());
 		
-		return "dbShop/paymentResult";
+//		return "dbShop/paymentResult";
+		return "redirect:/msg/paymentResultOk";
 	}
 	
 	// 배송지 정보 보여주기
@@ -468,4 +482,195 @@ public class DbShopController {
 		return "dbShop/dbOrderBaesong";
 	}
 	
+	// 현재 로그인 사용자가 주문내역 조회하기 폼 보여주기
+	@RequestMapping(value="/dbMyOrder", method=RequestMethod.GET)
+	public String dbMyOrderGet(HttpServletRequest request, HttpSession session, Model model,
+			@RequestParam(name="pag", defaultValue="1", required=false) int pag,
+			@RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize) {
+		String mid = (String) session.getAttribute("sMid");
+		int level = (int) session.getAttribute("sLevel");
+		if(level == 0) mid = "전체";
+		
+		/* 이곳부터 페이징 처리(블록페이지) 변수 지정 시작 */
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "dbMyOrder", mid, "");
+		
+		// 오늘 구매한 내역을 초기화면에 보여준다.
+		List<DbProductVO> vos = dbShopService.getMyOrderList(pageVo.getStartIndexNo(), pageSize, mid);
+		System.out.println("vos : " + vos);
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVo",pageVo);
+		
+		return "dbShop/dbMyOrder";
+	}
+	
+	// 날짜별 상태별 기존제품 구매한 주문내역 확인하기
+	@RequestMapping(value="/myOrderStatus", method=RequestMethod.GET)
+	public String myOrderStatusGet(
+			HttpServletRequest request, 
+			HttpSession session, 
+			String startJumun, 
+			String endJumun, 
+			@RequestParam(name="pag", defaultValue="1", required=false) int pag,
+			@RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize,
+  	  @RequestParam(name="conditionOrderStatus", defaultValue="전체", required=false) String conditionOrderStatus,
+			Model model) {
+		String mid = (String) session.getAttribute("sMid");
+		int level = (int) session.getAttribute("sLevel");
+		
+		if(level == 0) mid = "전체";
+		String searchString = startJumun + "@" + endJumun + "@" + conditionOrderStatus;
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "myOrderStatus", mid, searchString);  // 4번째인자에 '아이디/조건'(을)를 넘겨서 part를 아이디로 검색처리하게 한다.
+		
+		List<DbBaesongVO> vos = dbShopService.getMyOrderStatus(pageVo.getStartIndexNo(), pageSize, mid, startJumun, endJumun, conditionOrderStatus);
+		model.addAttribute("vos", vos);				
+		model.addAttribute("startJumun", startJumun);
+		model.addAttribute("endJumun", endJumun);
+		model.addAttribute("conditionOrderStatus", conditionOrderStatus);
+		model.addAttribute("pageVo", pageVo);
+		
+		return "dbShop/dbMyOrder";
+	}
+	
+  // 주문 상태별(결제완료/배송중~~) 조회하기
+  @RequestMapping(value="/orderStatus", method=RequestMethod.GET)
+  public String orderStatusGet(HttpSession session,
+      @RequestParam(name="pag", defaultValue="1", required=false) int pag,
+      @RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize,
+      @RequestParam(name="orderStatus", defaultValue="전체", required=false) String orderStatus,
+      Model model) {
+    String mid = (String) session.getAttribute("sMid");
+
+    PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "dbShopMyOrderStatus", mid, orderStatus);
+
+    List<DbBaesongVO> vos = dbShopService.getOrderStatus(mid, orderStatus, pageVo.getStartIndexNo(), pageSize);
+    model.addAttribute("orderStatus", orderStatus);
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVo", pageVo);
+
+    return "dbShop/dbMyOrder";
+  }
+  
+  // 주문 조건 조회하기(날짜별(오늘/일주일/보름/한달/3개월/전체)
+  @RequestMapping(value="/orderCondition", method=RequestMethod.GET)
+  public String orderConditionGet(HttpSession session, int conditionDate, Model model,
+      @RequestParam(name="pag", defaultValue="1", required=false) int pag,
+      @RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize) {
+    String mid = (String) session.getAttribute("sMid");
+    String strConditionDate = conditionDate + "";
+    PageVO pageVo = pageProcess.totRecCnt(pag, pageSize, "dbShopMyOrderCondition", mid, strConditionDate);
+
+    List<DbBaesongVO> vos = dbShopService.getOrderCondition(mid, conditionDate, pageVo.getStartIndexNo(), pageSize);
+    
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVo", pageVo);
+    model.addAttribute("conditionDate", conditionDate);
+
+    // 아래는 1일/일주일/보름/한달/3달/전체 조회시에 startJumun과 endJumun을 넘겨주는 부분(view에서 시작날짜와 끝날짜를 지정해서 출력시켜주기위해 startJumun과 endJumun값을 구해서 넘겨준다.)
+    Calendar startDateJumun = Calendar.getInstance();
+    Calendar endDateJumun = Calendar.getInstance();
+    startDateJumun.setTime(new Date());  // 오늘날짜로 셋팅
+    endDateJumun.setTime(new Date());    // 오늘날짜로 셋팅
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String startJumun = "";
+    String endJumun = "";
+    switch (conditionDate) {
+      case 1:
+        startJumun = sdf.format(startDateJumun.getTime());
+        endJumun = sdf.format(endDateJumun.getTime());
+        break;
+      case 7:
+        startDateJumun.add(Calendar.DATE, -7);
+        break;
+      case 15:
+        startDateJumun.add(Calendar.DATE, -15);
+        break;
+      case 30:
+        startDateJumun.add(Calendar.MONTH, -1);
+        break;
+      case 90:
+        startDateJumun.add(Calendar.MONTH, -3);
+        break;
+      case 99999:
+        startDateJumun.set(2022, 00, 01);
+        break;
+      default:
+        startJumun = null;
+        endJumun = null;
+    }
+    if(conditionDate != 1 && endJumun != null) {
+      startJumun = sdf.format(startDateJumun.getTime());
+      endJumun = sdf.format(endDateJumun.getTime());
+    }
+
+    model.addAttribute("startJumun", startJumun);
+    model.addAttribute("endJumun", endJumun);
+
+    return "dbShop/dbMyOrder";
+  }
+	
+  // 관리자에서 주문 확인하기
+	@RequestMapping(value="/adminOrderStatus")
+	public String dbOrderProcessGet(Model model,
+    @RequestParam(name="startJumun", defaultValue="", required=false) String startJumun,
+    @RequestParam(name="endJumun", defaultValue="", required=false) String endJumun,
+    @RequestParam(name="orderStatus", defaultValue="전체", required=false) String orderStatus,
+    @RequestParam(name="pag", defaultValue="1", required=false) int pag,
+    @RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize) {
+		
+		//System.out.println("startJumun: " + startJumun + " , endJumun : " + endJumun);
+
+		List<DbBaesongVO> vos = null;
+		PageVO pageVo = null;
+		String strNow = "";
+		if(startJumun.equals("")) {
+			Date now = new Date();
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    strNow = sdf.format(now);
+	    
+	    startJumun = strNow;
+	    endJumun = strNow;
+		}
+    
+    String strOrderStatus = startJumun + "@" + endJumun + "@" + orderStatus;
+    pageVo = pageProcess.totRecCnt(pag, pageSize, "adminDbOrderProcess", "", strOrderStatus);
+		
+//		if(startJumun.equals("")) {
+//	    Date now = new Date();
+//	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//	    strNow = sdf.format(now);
+//	    
+//	    startJumun = strNow;
+//	    endJumun = strNow;
+//	    
+//	    String strOrderStatus = startJumun + "@" + endJumun + "@" + orderStatus;
+//	    pageVo = pageProcess.totRecCnt(pag, pageSize, "adminDbOrderProcess", "", strOrderStatus);
+	    
+//	    vos = dbShopService.getAdminOrderStatus(strNow, strNow, orderStatus);
+//	  }
+//	  else {
+//	  	String strOrderStatus = startJumun + "@" + endJumun + "@" + orderStatus;
+//	  	pageVo = pageProcess.totRecCnt(pag, pageSize, "adminDbOrderProcess", "", strOrderStatus);
+	  	
+//		  vos = dbShopService.getAdminOrderStatus(startJumun, endJumun, orderStatus);
+//	  }
+		vos = dbShopService.getAdminOrderStatus(startJumun, endJumun, orderStatus);
+		//System.out.println("vos : " + vos);
+	
+	  model.addAttribute("startJumun", startJumun);
+	  model.addAttribute("endJumun", endJumun);
+	  model.addAttribute("orderStatus", orderStatus);
+	  model.addAttribute("vos", vos);
+	  model.addAttribute("pageVo", pageVo);
+	
+	  return "admin/dbShop/dbOrderProcess";
+	}
+  
+	// 관리자가 주문상태를 변경처리하는것
+	@ResponseBody
+	@RequestMapping(value="/goodsStatus", method=RequestMethod.POST)
+	public String goodsStatusGet(String orderIdx, String orderStatus) {
+		dbShopService.setOrderStatusUpdate(orderIdx, orderStatus);
+		return "";
+	}  
+  
 }

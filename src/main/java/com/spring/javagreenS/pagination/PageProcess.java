@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.javagreenS.dao.BoardDAO;
+import com.spring.javagreenS.dao.DbShopDAO;
 import com.spring.javagreenS.dao.GuestDAO;
 import com.spring.javagreenS.dao.MemberDAO;
 import com.spring.javagreenS.dao.PdsDAO;
@@ -21,6 +22,9 @@ public class PageProcess {
 	
 	@Autowired
 	PdsDAO pdsDAO;
+	
+	@Autowired
+	DbShopDAO dbShopDAO;
 
 	// 인자: 1.page번호, 2.page크기, 3.소속(예:게시판(board),회원(member),방명록(guest)..), 4.분류(part), 5.검색어(searchString)
 	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
@@ -47,6 +51,39 @@ public class PageProcess {
 		}
 		else if(section.equals("pds")) {
 			totRecCnt = pdsDAO.totRecCnt(part);
+		}
+		else if(section.equals("dbMyOrder")) {
+			totRecCnt = dbShopDAO.totRecCnt(part);
+		}
+		else if(section.equals("myOrderStatus")) {
+			// searchString = startJumun + "@" + endJumun + "@" + conditionOrderStatus;
+			String[] searchStringArr = searchString.split("@");
+			totRecCnt = dbShopDAO.totRecCntMyOrderStatus(part,searchStringArr[0],searchStringArr[1],searchStringArr[2]);
+		}
+		else if(section.equals("dbShopMyOrderStatus")) {
+			totRecCnt = dbShopDAO.totRecCntStatus(part,searchString);
+		}
+		else if(section.equals("dbShopMyOrderCondition")) {
+			//System.out.println("part : " + part + " , serchString: " + searchString);
+			totRecCnt = dbShopDAO.totRecCntCondition(part, Integer.parseInt(searchString));
+		}
+//		else if(section.equals("dbShopMyOrderCondition")) {
+//			// orderStatus = startJumun + "@" + endJumun + "@" + orderStatus;
+//			String[] searchStringArr = searchString.split("@");
+//			totRecCnt = dbShopDAO.totRecCntAdminStatus(searchStringArr[0],searchStringArr[1],searchStringArr[2]);
+//		}
+		else if(section.equals("adminDbOrderProcess")) {
+			// strOrderStatus = startJumun + "@" + endJumun + "@" + orderStatus
+			String[] searchStringArr = searchString.split("@");
+			totRecCnt = dbShopDAO.totRecCntAdminStatus(searchStringArr[0],searchStringArr[1],searchStringArr[2]);
+		}
+		else if(section.equals("adminMemberList")) {
+			if(part.equals("")) {
+				totRecCnt = memberDAO.totRecCntAdminMemberList(Integer.parseInt(searchString));
+			}
+			else {
+				totRecCnt = memberDAO.totRecCntAdminMemberMidList(part);
+			}
 		}
 		
 		int totPage = (totRecCnt%pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize)+1;

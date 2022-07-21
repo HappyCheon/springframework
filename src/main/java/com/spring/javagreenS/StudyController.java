@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.common.ARIAUtil;
 import com.spring.javagreenS.service.StudyService;
+import com.spring.javagreenS.vo.ChartVO;
 import com.spring.javagreenS.vo.KakaoAddressVO;
+import com.spring.javagreenS.vo.KakaoAreaVO;
 import com.spring.javagreenS.vo.MailVO;
 import com.spring.javagreenS.vo.OperatorVO;
 import com.spring.javagreenS.vo.PersonVO;
@@ -420,9 +423,115 @@ public class StudyController {
 	// 카카오맵 응용하기3
 	@RequestMapping(value="/kakaoEx3", method=RequestMethod.GET)
 	public String kakaoEx3Get(Model model, String address) {
-		if(address == null) address = "사창사거리";
+		if(address == null) address = "청주 사창사거리";
 		model.addAttribute("address", address);
 		return "study/kakaomap/kakaoEx3";
 	}
+	
+	// 카카오맵 응용하기4
+	@RequestMapping(value="/kakaoEx4", method=RequestMethod.GET)
+	public String kakaoEx4Get(Model model) {
+		String[] address1s = studyService.getAddress1();
+		
+		double latitude = 36.63508797975421;
+		double longitude = 127.45959376343134;
+  	
+		model.addAttribute("address1s", address1s);
+		
+		model.addAttribute("latitude", latitude);
+		model.addAttribute("longitude", longitude);
+		
+		return "study/kakaomap/kakaoEx4";
+	}
+	
+	// '도시'를 선택해서 넘기면 각 '지역'을 검색해서 돌려준다. : ajax를 사용하여 처리함
+	@ResponseBody
+	@RequestMapping(value="/kakaoEx4", method=RequestMethod.POST)
+	public String[] kakaoEx4Post(@RequestBody String address1) {
+		//List<KakaoAreaVO> vos = studyService.getAddress2(address1);
+		String[] address2 = studyService.getAddress2(address1);
+		
+		return address2;
+	}
+	
+	// '도시'와 '지역'을 선택후 '검색'버튼을 클릭하면 해당지역의 주변 '카테고리'들을 검색시켜준다.
+	@RequestMapping(value="/kakaoEx4Search", method=RequestMethod.POST)
+	public String kakaoEx4SearchPost(Model model, 
+			@RequestParam(name="address1", defaultValue="충청북도", required=false) String address1,
+			@RequestParam(name="address2", defaultValue="청주시", required=false) String address2) {
+		
+		KakaoAreaVO vo = studyService.getAddressSearch(address1, address2);
+		
+		model.addAttribute("address1", vo.getAddress1());
+		model.addAttribute("address2", vo.getAddress2());
+		model.addAttribute("latitude", vo.getLatitude());
+		model.addAttribute("longitude", vo.getLongitude());
+		
+		return "study/kakaomap/kakaoEx4Search";
+	}
+	
+  // 카카오맵 응용하기5
+	@RequestMapping(value="/kakaoEx5", method=RequestMethod.GET)
+	public String kakaoEx5Get(Model model, String address) {
+		if(address == null) address = "청주 사창사거리";
+		model.addAttribute("address", address);
+		return "study/kakaomap/kakaoEx5";
+	}
+	
+  // 구글차트만들기
+	@RequestMapping(value="/googleChart", method=RequestMethod.GET)
+	public String googleChartGet(Model model,
+			@RequestParam(name="part", defaultValue="bar", required=false) String part) {
+		model.addAttribute("part", part);
+		return "study/chart/chart";
+	}
+	
+	// 구글차트만들기2 - 자료 입력하여 차크 만들기
+	@RequestMapping(value="/googleChart2", method=RequestMethod.GET)
+	public String googleChartGet2(Model model,
+			@RequestParam(name="part", defaultValue="bar", required=false) String part) {
+		model.addAttribute("part", part);
+		return "study/chart2/chart";
+	}
+	
+	@RequestMapping(value="/googleChart2", method=RequestMethod.POST)
+	public String googleChart2Post(Model model,
+			ChartVO vo) {
+		model.addAttribute("vo", vo);
+		return "study/chart2/chart";
+	}
+	
+	// 최근 방문자수 차트로 표시하기
+	@RequestMapping(value="/googleChart2Recently", method=RequestMethod.GET)
+	public String googleChart2RecentlyGet(Model model,
+			@RequestParam(name="part", defaultValue="line", required=false) String part) {
+		//System.out.println("part : " + part);
+		List<ChartVO> vos = null;
+		if(part.equals("lineChartVisitCount")) {
+			vos = studyService.getRecentlyVisitCount();
+			// vos로 차트에서 처리가 잘 안되는것 같아서 다시 배열로 담아서 처리해본다.
+			String[] visitDates = new String[7];
+			int[] visitDays = new int[7];	// line차트는 x축과 y축이 모두 숫가자 와야하기에 날짜중에서 '일'만 담기로 한다.(정수타입으로)
+			int[] visitCounts = new int[7];
+			for(int i=0; i<7; i++) {
+				visitDates[i] = vos.get(i).getVisitDate();
+				visitDays[i] = Integer.parseInt(vos.get(i).getVisitDate().toString().substring(8));
+				visitCounts[i] = vos.get(i).getVisitCount();
+			}
+			
+			model.addAttribute("title", "최근 7일간 방문횟수");
+			model.addAttribute("subTitle", "최근 7일동안 방문한 해당일자 방문자 총수를 표시합니다.");
+			model.addAttribute("visitCount", "방문횟수");
+			model.addAttribute("legend", "일일 방문 총횟수");
+			model.addAttribute("part", part);
+//			model.addAttribute("vos", vos);
+			model.addAttribute("visitDates", visitDates);
+			model.addAttribute("visitDays", visitDays);
+			model.addAttribute("visitCounts", visitCounts);
+		}
+		
+		return "study/chart2/chart";
+	}
+	
 	
 }

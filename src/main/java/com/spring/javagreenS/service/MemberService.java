@@ -30,4 +30,18 @@ public interface MemberService {
 
 	public MemberVO getMemEmailCheck(String email);
 
+	public void setKakaoMemberInputOk(String mid, String pwd, String nickName, String email);
+
+	public String getTodayVisitDate();
+
+	public void setTodayVisitCountInsert();
+
+	public void setTodayVisitCountUpdate(String strToday);
+
+	public ArrayList<MemberVO> getAdminMemberLevelList(int startIndexNo, int pageSize, int level);
+
+	public ArrayList<MemberVO> getAdminMemberMidList(int startIndexNo, int pageSize, String mid);
+
+	public void setAdminLevelUpdate(int idx, int level);
+
 }
