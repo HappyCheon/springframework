@@ -27,6 +27,7 @@
 	        <a href="${ctp}/study/ajax/ajaxMenu" class="w3-bar-item w3-button">AJax연습</a>
 	        <a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">메일연습</a>
 	        <a href="${ctp}/study/uuid/uuidForm" class="w3-bar-item w3-button">UUID연습</a>
+	        <a href="${ctp}/study/qrCode" class="w3-bar-item w3-button">QR코드연습</a>
 	      </div>
 	    </div>
 	    <div class="w3-dropdown-hover w3-hide-small">

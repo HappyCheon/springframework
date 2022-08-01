@@ -45,4 +45,36 @@ public interface StudyDAO {
 
 	public List<ChartVO> getRecentlyVisitCount();
 
+	public void setQrCreate(@Param("qrCodeName") String qrCodeName);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

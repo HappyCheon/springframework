@@ -53,4 +53,33 @@ public interface StudyService {
 
 	public List<ChartVO> getRecentlyVisitCount();
 
+	public String qrCreate(String mid, String uploadPath, String moveUrl);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

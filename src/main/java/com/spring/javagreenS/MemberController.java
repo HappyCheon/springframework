@@ -166,14 +166,15 @@ public class MemberController {
 			
   		// 오늘 총 사용자의 방문횟수를 누적한다.(오늘날짜로 첫 방문은 1이되고, 그렇지 않으면 기존의 오늘 날짜에 +1 시킨다.)
 			String visitDate = memberService.getTodayVisitDate();
+			
 			Date today = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String strToday = sdf.format(today);
 			
-			if(!strToday.equals(visitDate)) {
+			if(!strToday.equals(visitDate)) {		// 오늘 사이트에 최초방문자 일때는 visit테이블에 오늘날짜 등록한다.
 				memberService.setTodayVisitCountInsert();
 			}
-			else {
+			else {		// 오늘 사이트에 최초방문자가 아닐때는 일때는 visit테이블 오늘날짜에 업데이트한다.
 				memberService.setTodayVisitCountUpdate(strToday);
 			}
 			

@@ -4,70 +4,79 @@
   <select id="getOperator" resultType="com.spring.javagreenS.vo.OperatorVO">
     select * from operator2 where oid = #{oid};
   </select>
-  
+
   <select id="getOperatorHashKey" resultType="String">
     select hashKey from operatorHashTable2 where idx = #{keyIdx};
   </select>
-  
+
   <select id="getOperatorList" resultType="com.spring.javagreenS.vo.OperatorVO">
     select * from operator2 order by oid;
   </select>
-  
+
   <select id="getOperatorVos" resultType="com.spring.javagreenS.vo.OperatorVO">
     select * from operator2 where oid like concat('%',#{oid},'%') order by oid;
   </select>
-  
+
   <select id="getPersonList" resultType="com.spring.javagreenS.vo.PersonVO">
     select p1.*, p2.* from person p1, personDetail p2 where p1.mid=p2.mid order by idx desc;
   </select>
-  
+
   <select id="getAddressName" resultType="com.spring.javagreenS.vo.KakaoAddressVO">
     select * from kakaoAddress where address = #{address};
   </select>
-  
+
   <select id="getAddressNameList" resultType="com.spring.javagreenS.vo.KakaoAddressVO">
     select * from kakaoAddress order by address;
   </select>
-  
+
   <select id="getAddress1" resultType="String">
     select distinct address1 from kakaoArea;
   </select>
-  
+
   <select id="getAddress2" resultType="String">
     select distinct address2 from kakaoArea where address1 = #{address1} order by address2;
   </select>
-  
-  <select id="getAddressSearch" resultType="com.spring.javagreenS.vo.KakaoAreaVO">
-    select distinct address1, address2, latitude, longitude from kakaoArea where address1 = #{address1} and address2 = #{address2};
-  </select>
-  
-  <select id="getRecentlyVisitCount" resultType="com.spring.javagreenS.vo.ChartVO">
-    select substring(visitDate,1,10) as visitDate,visitCount from visit order by visitDate desc limit 7;
-  </select>
-  
-  
-  
 
-  
+  <select id="getAddressSearch" resultType="com.spring.javagreenS.vo.KakaoAreaVO">
+    select distinct address1, address2, latitude, longitude from kakaoArea where address1 =
+    #{address1} and address2 = #{address2};
+  </select>
+
+  <select id="getRecentlyVisitCount" resultType="com.spring.javagreenS.vo.ChartVO">
+    select substring(visitDate,1,10) as visitDate,visitCount from visit order by
+    visitDate desc limit 7;
+  </select>
+
+
+
+
+
   <insert id="setOperatorInputOk">
     insert into operator2 values (#{vo.oid}, #{vo.pwd}, #{vo.name}, #{vo.keyIdx});
   </insert>
-  
+
   <insert id="setPersonInput">
     insert into person values (default, #{vo.mid}, #{vo.pwd});
-    insert into personDetail values (#{vo.mid}, #{vo.name}, #{vo.age}, #{vo.address});
+    insert into personDetail values (#{vo.mid}, #{vo.name},
+    #{vo.age}, #{vo.address});
   </insert>
-  
+
   <insert id="setAddressName">
     insert into kakaoAddress values (#{vo.address},#{vo.latitude},#{vo.longitude});
   </insert>
+
+  <insert id="setQrCreate">
+    insert into qrCode values (default,#{qrCodeName});
+  </insert>
   
+  
+
   <delete id="setOperatorDelete">
     delete from operator2 where oid = #{oid};
   </delete>
-  
+
   <delete id="kakaoEx2Delete">
     delete from kakaoAddress where address = #{address};
   </delete>
-  
+
 </mapper>

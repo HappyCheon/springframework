@@ -14,4 +14,7 @@ public @Data class PageVO {
 	private int lastBlock;
 	
 	private String part;
+	
+	private String startJumun;
+	private String endJumun;
 }

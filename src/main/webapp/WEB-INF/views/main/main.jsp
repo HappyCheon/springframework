@@ -8,12 +8,44 @@
   <meta charset="UTF-8">
   <jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+	  function popupCheck() {
+		  <c:forEach var="popup" items="${popupVos}"> /* main컨트롤러에서 popupSw가 'Y'인 자료만 보내준다. */
+		  	var url = "${ctp}/notify/popup?idx=${popup.idx}";
+		  	openPopup(url,${popup.idx});
+		  </c:forEach>
+	  }
+	  
+	  var xPos = 0;
+	  function openPopup(url,idx) {
+		  xPos += 100;
+		  var cookieCheck = getCookie("popupYN"+idx);
+		  if(cookieCheck != "N") {
+		  	window.open(url,"","width=400,height=600,left="+xPos+",top=5");
+		  }
+	  }
+	 
+	  function getCookie(name) {
+		  var cookie = document.cookie;  // 클라이언트에 저장된 쿠키의 정보를 읽어(가져)온다.
+		  if(cookie != "") {
+			  var cookieArray = cookie.split("; ");
+			  for(var index in cookieArray) {
+				  var cookieName = cookieArray[index].split("=");
+				  if(cookieName[0] == name) {
+					  return cookieName[1];
+				  }
+			  }
+		  }
+		  return;
+	  }
+	  
+	</script>
 	<style>
 		body {font-family: "Lato", sans-serif}
 		.mySlides {display: none}
 	</style>
 </head>
-<body>
+<body onload="javascript:popupCheck()">
 <!-- NavBar -->
 <jsp:include page="/WEB-INF/views/include/nav.jsp"/>
 

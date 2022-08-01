@@ -3,6 +3,7 @@ package com.spring.javagreenS.pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.javagreenS.dao.AdminDAO;
 import com.spring.javagreenS.dao.BoardDAO;
 import com.spring.javagreenS.dao.DbShopDAO;
 import com.spring.javagreenS.dao.GuestDAO;
@@ -25,7 +26,10 @@ public class PageProcess {
 	
 	@Autowired
 	DbShopDAO dbShopDAO;
-
+	
+	@Autowired
+	AdminDAO adminDAO;
+	
 	// 인자: 1.page번호, 2.page크기, 3.소속(예:게시판(board),회원(member),방명록(guest)..), 4.분류(part), 5.검색어(searchString)
 	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
 		PageVO pageVO = new PageVO();
@@ -84,6 +88,9 @@ public class PageProcess {
 			else {
 				totRecCnt = memberDAO.totRecCntAdminMemberMidList(part);
 			}
+		}
+		else if(section.equals("qrCodeTicket")) {
+			totRecCnt = adminDAO.totRecQrCodeTicket(part, searchString);
 		}
 		
 		int totPage = (totRecCnt%pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize)+1;

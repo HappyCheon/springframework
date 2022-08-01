@@ -26,7 +26,7 @@
   </select>
   
   <select id="getTodayVisitDate" resultType="String">
-    SELECT substring(lastDate,1,10) FROM member2 ORDER BY lastDate DESC LIMIT 1;
+    SELECT substring(visitDate,1,10) as visitDate FROM visit ORDER BY visitDate DESC LIMIT 1;
   </select>
   
   <select id="getVisitCount" resultType="com.spring.javagreenS.vo.ChartVO">

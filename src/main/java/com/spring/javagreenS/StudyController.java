@@ -9,6 +9,8 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -25,11 +27,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.common.ARIAUtil;
+import com.spring.javagreenS.service.MemberService;
 import com.spring.javagreenS.service.StudyService;
 import com.spring.javagreenS.vo.ChartVO;
 import com.spring.javagreenS.vo.KakaoAddressVO;
 import com.spring.javagreenS.vo.KakaoAreaVO;
 import com.spring.javagreenS.vo.MailVO;
+import com.spring.javagreenS.vo.MemberVO;
 import com.spring.javagreenS.vo.OperatorVO;
 import com.spring.javagreenS.vo.PersonVO;
 
@@ -45,6 +49,9 @@ public class StudyController {
 	
 	@Autowired
 	JavaMailSender mailSender;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@RequestMapping(value = "/password/passCheck1", method = RequestMethod.GET)
 	public String passCheck1Get() {
@@ -533,5 +540,37 @@ public class StudyController {
 		return "study/chart2/chart";
 	}
 	
+	// QR코드 생성하기 폼(URL 등록폼)
+	@RequestMapping(value="/qrCode", method=RequestMethod.GET)
+	public String qrCodeGet(HttpSession session, Model model) {
+		String mid = (String) session.getAttribute("sMid");
+		MemberVO vo = memberService.getMemIdCheck(mid);
+		
+		model.addAttribute("email", vo.getEmail());
+		
+		return "study/qrCode/qrCode";
+	}
+	
+	// QR코드 생성하기 처리부분
+	@SuppressWarnings("deprecation")
+	@ResponseBody
+	@RequestMapping(value="/qrCreate", method=RequestMethod.POST)
+	public String barCreatePost(HttpServletRequest request, HttpSession session, String moveUrl) {
+		String mid = (String) session.getAttribute("sMid");
+		String uploadPath = request.getRealPath("/resources/data/qrCode/");
+		String qrCodeName = studyService.qrCreate(mid, uploadPath, moveUrl);	// qr코드가 저장될 서버경로와 qr코드 찍었을때 이동할 url을 서비스객체로 넘겨서 qr코드를 생성하게 한다.
+		
+    return qrCodeName;
+	}
 	
 }
+
+
+
+
+
+
+
+
+
+

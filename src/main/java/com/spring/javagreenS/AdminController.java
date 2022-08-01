@@ -1,6 +1,10 @@
 package com.spring.javagreenS;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,7 @@ import com.spring.javagreenS.pagination.PageVO;
 import com.spring.javagreenS.service.AdminService;
 import com.spring.javagreenS.service.MemberService;
 import com.spring.javagreenS.vo.MemberVO;
+import com.spring.javagreenS.vo.QrCodeVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -90,6 +95,101 @@ public class AdminController {
 		return "";
 	}
 	
+	/*
+	@RequestMapping(value="/qrCode", method = RequestMethod.GET)
+	public String qrCodeGet(Model model) {
+		String[] qrCodes = adminService.getQrCode();
+		model.addAttribute("qrCodes", qrCodes);
+		
+		return "admin/qrCode/qrCode";
+	}
+	*/
+	
+	// Qr Code 발급한것들에 대한 화면 보여주기
+	@RequestMapping(value="/qrCodeTicket", method = RequestMethod.GET)
+	public String qrCodeTicketGet(
+		@RequestParam(name="startJumun", defaultValue="", required=false) String startJumun,
+    @RequestParam(name="endJumun", defaultValue="", required=false) String endJumun,
+    @RequestParam(name="pag", defaultValue="1", required=false) int pag,
+    @RequestParam(name="pageSize", defaultValue="5", required=false) int pageSize,
+    Model model) {
+			
+		PageVO pageVo = null;
+    pageVo = pageProcess.totRecCnt(pag, pageSize, "qrCodeTicket", startJumun, endJumun);
+    pageVo.setStartJumun(startJumun);
+    pageVo.setEndJumun(endJumun);
+		
+    ArrayList<QrCodeVO> vos = adminService.getQrCodeCondition(pageVo.getStartIndexNo(), pageSize, startJumun, endJumun);
+    
+    model.addAttribute("vos", vos);
+	  model.addAttribute("pageVo", pageVo);
+		
+		return "admin/qrCode/qrCode";
+	}
+	
+	// QR Code 중 발급된것 1개씩 삭제처리
+	@SuppressWarnings("deprecation")
+	@ResponseBody
+	@RequestMapping(value="/qrCodeDelete", method = RequestMethod.POST)
+	public String qrCodeDeletePost(HttpServletRequest request, QrCodeVO vo) {
+		String uploadPath = request.getRealPath("/resources/data/qrCode/");
+		adminService.setQrCodeDelete(uploadPath, vo);
+		return "";
+	}
+	
+	// QR Code 선택항목 삭제하기
+	@SuppressWarnings("deprecation")
+	@ResponseBody
+	@RequestMapping(value="/qrCodeTicket", method = RequestMethod.POST)
+	public String qrCodeTicketPost(HttpServletRequest request, String delItems) {
+		String uploadPath = request.getRealPath("/resources/data/qrCode/");
+		
+		String[] idxs = delItems.split("/");
+		for(String idx : idxs) {
+			adminService.setQrCodeSelectDelete(uploadPath, Integer.parseInt(idx));
+		}
+		return "";
+	}
+	
+	// 임시파일 삭제 메뉴 부르기
+	@RequestMapping(value="/imsiFileDelete", method = RequestMethod.GET)
+	public String imsiFileDeleteGet() {
+		return "admin/file/tempDelete";
+	}
+	
+	// 임시폴더의 파일내역보기
+	@SuppressWarnings("deprecation")
+	@ResponseBody
+	@RequestMapping(value="/tempFileLoad", method = RequestMethod.POST)
+	public String[] tempFileLoadPost(HttpServletRequest request, String folderName) throws IOException {
+		String realPath = request.getRealPath("/resources/");
+		
+		if(folderName.equals("ckeditor")) {
+			realPath += "data/ckeditor/";
+		}
+		else if(folderName.equals("dbShop")) {
+			realPath += "data/dbShop/";
+		}
+		String[] files = new File(realPath).list();
+		
+		return files;
+	}
+	
+  // 임시폴더에서 선택항목 삭제하기
+	@SuppressWarnings("deprecation")
+	@ResponseBody
+	@RequestMapping(value="/imsiFileDelete", method = RequestMethod.POST)
+	public String tempFileLoadPost(HttpServletRequest request, String folderName, String delItems) {
+		delItems = delItems.substring(0, delItems.length()-1);
+		String uploadPath = request.getRealPath("/resources/data/") + folderName + "/";
+		
+		String[] fileNames = delItems.split("/");
+		for(String fileName : fileNames) {
+			String realPathFile = uploadPath + fileName;
+			new File(realPathFile).delete();
+		}
+		return "";
+	}
 	
 }
 

@@ -32,7 +32,18 @@
     <tr><td>직업 : ${vo.job}</td></tr>
     <tr><td>취미 : ${vo.hobby}</td></tr>
     <tr><td>자기소개 : <br/>${fn:replace(vo.content,newLine,'<br/>')}</td></tr>
-    <tr><td>등급 : ${sStrLevel}</td></tr>
+    <tr>
+      <td>등급 :
+        <c:choose>
+          <c:when test="${vo.level == 0}">관리자</c:when>
+          <c:when test="${vo.level == 1}">운영자</c:when>
+          <c:when test="${vo.level == 2}">우수회원</c:when>
+          <c:when test="${vo.level == 3}">정회원</c:when>
+          <c:when test="${vo.level == 4}">준회원</c:when>
+          <c:otherwise>비회원</c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
     <tr><td>총방문횟수 : ${vo.visitCnt}</td></tr>
     <tr><td>가입일자 : ${vo.startDate}</td></tr>
     <tr><td>마지막방문일자 : ${vo.lastDate}</td></tr>

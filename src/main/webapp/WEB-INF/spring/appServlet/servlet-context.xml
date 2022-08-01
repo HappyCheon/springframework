@@ -22,6 +22,7 @@
 	<resources mapping="/pds/**" location="/resources/data/pds/" />
 	<resources mapping="/data/dbShop/**" location="/resources/data/dbShop/" />
 	<resources mapping="/dbShop/product/**" location="/resources/data/dbShop/product/" />
+	<resources mapping="/data/qrCode/**" location="/resources/data/qrCode/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -45,6 +46,7 @@
   <beans:bean id="memberInterceptor" class="com.spring.javagreenS.interceptor.MemberInterceptor"/>
   <beans:bean id="boardInterceptor" class="com.spring.javagreenS.interceptor.BoardInterceptor"/>
   <beans:bean id="pdsInterceptor" class="com.spring.javagreenS.interceptor.PdsInterceptor"/>
+  <beans:bean id="adminInterceptor" class="com.spring.javagreenS.interceptor.AdminInterceptor"/>
   <interceptors>
     <interceptor>
       <mapping path="/study/**"/>
@@ -81,6 +83,10 @@
       <exclude-mapping path="/pds/pdsDownload"/>
       <exclude-mapping path="/pds/pdsInfor"/>
       <beans:ref bean="pdsInterceptor"/>
+    </interceptor>
+    <interceptor>
+      <mapping path="/admin/**"/>
+      <beans:ref bean="adminInterceptor"/>
     </interceptor>
   </interceptors>
   

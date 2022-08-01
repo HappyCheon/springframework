@@ -211,6 +211,17 @@
     		}
     	});
     }
+   
+    // 이미지 미리보기...
+    function rt_imageChange(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				$('#rt_image').attr('src', e.target.result);
+			}                
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
   </script>
 </head>
 <body>
@@ -388,17 +399,29 @@
 			  </label>
 			</div>
     </div>
+    <!-- 
     <div  class="form-group">
       회원 사진(파일용량:2MByte이내) :
       <input type="file" name="fName" id="file" class="form-control-file border"/>
     </div>
-    <button type="button" class="btn btn-secondary" onclick="fCheck()">회원가입</button> &nbsp;
-    <button type="reset" class="btn btn-secondary">다시작성</button> &nbsp;
-    <button type="button" class="btn btn-secondary" onclick="location.href='${ctp}/member/memLogin';">돌아가기</button>
-    <input type="hidden" name="photo"/>
-    <input type="hidden" name="email"/>
-    <input type="hidden" name="tel"/>
-		<input type="hidden" name="address" id="address">
+     -->
+    <div id="btnFName" style="margin-left:40px;border-radius:15px;width:34%;height:400;float:left">
+  		<div>
+  			<%-- <img id="rt_image" src="${ctp}/data/rt_shop/noimage.jpg" style="height:330;width:100%;border-radius:15px"> --%>
+  			<img id="rt_image" style="height:330;width:100%;border-radius:15px">
+  		</div>
+  		<label for=file class="w3-button w3-white w3-border w3-round-xlarge" style="font-size:15;margin:15 auto;width:100%">사진등록</label>
+  		<input type="file" name="fName" id="file" onchange="rt_imageChange(this)" style="display:none" accept=".jpg,.gif,.png,.jpeg" required/>
+  	</div>
+  	<div>
+	    <button type="button" class="btn btn-secondary" onclick="fCheck()">회원가입</button> &nbsp;
+	    <button type="reset" class="btn btn-secondary">다시작성</button> &nbsp;
+	    <button type="button" class="btn btn-secondary" onclick="location.href='${ctp}/member/memLogin';">돌아가기</button>
+	    <input type="hidden" name="photo"/>
+	    <input type="hidden" name="email"/>
+	    <input type="hidden" name="tel"/>
+			<input type="hidden" name="address" id="address">
+		</div>
   </form>
   <p><br/></p>
 </div>

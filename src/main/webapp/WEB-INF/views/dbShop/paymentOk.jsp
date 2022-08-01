@@ -14,7 +14,7 @@
 		IMP.init('imp21064327');
 		
 		IMP.request_pay({
-		    pg : 'inicis', // version 1.1.0부터 지원.
+		    pg : 'inicis', // version 1.1.0부터 지원.		// 변경된 방침에서는 pg : 'html5_inicis' 로 고쳐준다.
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : '${payMentVo.name}',

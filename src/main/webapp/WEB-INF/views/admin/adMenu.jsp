@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <title>adMenu.jsp(관리자메뉴)</title>
   <jsp:include page="/WEB-INF/views/include/bs4.jsp"/>
-  <frameset cols="130px, *">
+  <frameset cols="150px, *">
     <frame src="${ctp}/admin/adLeft.ad" name="adLeft" frameborder="0"/>
     <frame src="${ctp}/admin/adContent.ad" name="adContent"  frameborder="0"/>
   </frameset>

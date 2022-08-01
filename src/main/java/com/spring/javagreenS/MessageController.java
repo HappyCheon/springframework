@@ -169,6 +169,18 @@ public class MessageController {
 			model.addAttribute("msg", "결제가 정상적으로 완료되었습니다.");
 			model.addAttribute("url", "dbShop/paymentResult");
 		}
+		else if(msgFlag.equals("adminRecognizeNo")) {
+			model.addAttribute("msg", "관리자 인증이 필요합니다.");
+			model.addAttribute("url", "member/memLogin");
+		}
+		else if(msgFlag.equals("notifyInputOk")) {
+			model.addAttribute("msg", "공지사항이 등록되었습니다.");
+			model.addAttribute("url", "notify/nList");
+		}
+		else if(msgFlag.equals("notifyUpdateOk")) {
+			model.addAttribute("msg", "공지사항이 수정되었습니다.");
+			model.addAttribute("url", "notify/nList");
+		}
 		
 		return "include/message";
 	}
