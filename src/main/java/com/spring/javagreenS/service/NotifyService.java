@@ -20,4 +20,6 @@ public interface NotifyService {
 
 	public List<NotifyVO> getNotifyPopup();
 
+	public NotifyVO getNofifyView(int idx);
+
 }

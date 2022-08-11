@@ -23,6 +23,7 @@
 	<resources mapping="/data/dbShop/**" location="/resources/data/dbShop/" />
 	<resources mapping="/dbShop/product/**" location="/resources/data/dbShop/product/" />
 	<resources mapping="/data/qrCode/**" location="/resources/data/qrCode/" />
+	<resources mapping="/inquiry/**" location="/resources/data/inquiry/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -74,6 +75,8 @@
       <mapping path="/pds/pdsDownload"/>
       <mapping path="/pds/pdsInfor"/>
       <mapping path="/dbShop/**"/>    <!-- 쇼핑몰도 정회원 이상만 사용할 수 있게 처리한다. -->
+      <mapping path="/qna/**"/>       <!-- QnA도 정회원 이상만 사용할 수 있게 처리한다. -->
+      <mapping path="/inquiry/**"/>       <!-- 1:1문의도 정회원 이상만 사용할 수 있게 처리한다. -->
       <exclude-mapping path="/board/boardList"/>
       <beans:ref bean="boardInterceptor"/>
     </interceptor>

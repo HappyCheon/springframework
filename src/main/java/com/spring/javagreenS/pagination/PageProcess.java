@@ -7,8 +7,10 @@ import com.spring.javagreenS.dao.AdminDAO;
 import com.spring.javagreenS.dao.BoardDAO;
 import com.spring.javagreenS.dao.DbShopDAO;
 import com.spring.javagreenS.dao.GuestDAO;
+import com.spring.javagreenS.dao.InquiryDAO;
 import com.spring.javagreenS.dao.MemberDAO;
 import com.spring.javagreenS.dao.PdsDAO;
+import com.spring.javagreenS.dao.QnaDAO;
 
 @Service
 public class PageProcess {
@@ -29,6 +31,12 @@ public class PageProcess {
 	
 	@Autowired
 	AdminDAO adminDAO;
+	
+	@Autowired
+  QnaDAO qnaDAO;
+	
+	@Autowired
+	InquiryDAO inquiryDAO;
 	
 	// 인자: 1.page번호, 2.page크기, 3.소속(예:게시판(board),회원(member),방명록(guest)..), 4.분류(part), 5.검색어(searchString)
 	public PageVO totRecCnt(int pag, int pageSize, String section, String part, String searchString) {
@@ -68,7 +76,6 @@ public class PageProcess {
 			totRecCnt = dbShopDAO.totRecCntStatus(part,searchString);
 		}
 		else if(section.equals("dbShopMyOrderCondition")) {
-			//System.out.println("part : " + part + " , serchString: " + searchString);
 			totRecCnt = dbShopDAO.totRecCntCondition(part, Integer.parseInt(searchString));
 		}
 //		else if(section.equals("dbShopMyOrderCondition")) {
@@ -91,6 +98,12 @@ public class PageProcess {
 		}
 		else if(section.equals("qrCodeTicket")) {
 			totRecCnt = adminDAO.totRecQrCodeTicket(part, searchString);
+		}
+		else if(section.equals("qna")) {
+			totRecCnt = qnaDAO.totRecCnt();
+		}
+		else if(section.equals("inquiry")) {
+			totRecCnt = inquiryDAO.totRecCnt(part, searchString);
 		}
 		
 		int totPage = (totRecCnt%pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize)+1;

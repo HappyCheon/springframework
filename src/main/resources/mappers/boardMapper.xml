@@ -74,6 +74,14 @@
     update boardReply2 set hostIp='' where idx = #{idx};
   </update>
   
+  <update id="setGoodCount">
+    update board2 set good=good+1 where idx = #{idx};
+  </update>
+  
+  <update id="setGoodCountMinus">
+    update board2 set good=good-1 where idx = #{idx};
+  </update>
+  
   
   <delete id="setBoardDelete">
     delete from board2 where idx = #{idx};

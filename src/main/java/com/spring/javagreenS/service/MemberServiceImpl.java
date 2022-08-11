@@ -47,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
 			else {
 				UUID uid = UUID.randomUUID();
 				String saveFileName = uid + "_" + oFileName;
+				
 				ProjectSupport ps = new ProjectSupport();
 				ps.writeFile(fName, saveFileName,"member");
 				vo.setPhoto(saveFileName);

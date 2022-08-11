@@ -84,28 +84,48 @@
   <div id="notifyContent">
 	  <form name="myform" method="get">
 	    <ul>
-	      <c:set var="num" value="${curScrNo}"/>
-	      <c:forEach var="vo" items="${vos}">
-	        <li><hr>
-	          <span>
-	            <div class="container mt-3">
-	              <div class="d-flex justify-content-between mb-3">
-	                <div class="p-2">
-	                  <h5><b>[${vo.idx}.공지${num}] ${vo.title}</b></h5>&nbsp; &nbsp;
-	                </div>
-	              </div>
-	            </div>
-	          </span>
-	          <ul style="background-color:#fff5ee">
-	            <c:set var="content" value="${fn:replace(vo.content,newLine,'<br/>')}"/>
-	            <li>${content}</li><br/>
-	            <li>게시일 : ${fn:substring(vo.startDate,0,10)} ~ ${fn:substring(vo.endDate,0,10)}</li>
-	          </ul>
-	        </li>
-	        <c:set var="num" value="${num-1}"/>
+	      <c:set var="cnt" value="1"/>
+	      <c:forEach var="vo" items="${vos}" varStatus="st">
+	        <c:if test="${vo.popupSw == 'Y'}">
+		        <li><hr>
+		          <span>
+		            <div class="container mt-3">
+		              <div class="d-flex justify-content-between mb-3">
+		                <div class="p-2">
+		                  <h5><b>[공지${cnt}] ${vo.title}</b></h5>&nbsp; &nbsp;
+		                </div>
+		              </div>
+		            </div>
+		          </span>
+		          <ul style="background-color:#fff5ee">
+		            <c:set var="content" value="${fn:replace(vo.content,newLine,'<br/>')}"/>
+		            <li>${content}</li><br/>
+		            <li>게시일 : ${fn:substring(vo.startDate,0,10)} ~ ${fn:substring(vo.endDate,0,10)}</li>
+		          </ul>
+		        </li>
+		        <c:set var="cnt" value="${cnt+1}"/>
+	        </c:if>
 	      </c:forEach>
 	    </ul>
 	  </form>
+	  <br/><hr/><br/>
+	  <h3 class="text-center">-공 지 사 항-</h3><br/>
+	    <table class="table table-hover">
+	      <tr class="table-dark text-dark">
+	        <th>번호</th>
+	        <th>제목</th>
+	        <th>게시기간</th>
+	      </tr>
+	      <c:set var="cnt" value="${fn:length(vos)}"/>
+			  <c:forEach var="vo" items="${vos}">
+					<tr>
+					  <td>${cnt}</td>
+					  <td><a href="javascript:window.open('${ctp}/notify/notifyView?idx=${vo.idx}','mnList','width=560px,height=600px')">${vo.title}</a></td>
+					  <td>${fn:substring(vo.startDate,0,10)} ~ ${fn:substring(vo.endDate,0,10)}</td>
+					</tr>
+					<c:set var="cnt" value="${cnt - 1}"/>
+		    </c:forEach>
+	    </table>
   </div>
 </div>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>

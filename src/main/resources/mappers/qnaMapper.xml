@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS.dao.QnaDAO">
+  <select id="totRecCnt" resultType="int">
+    select count(*) from qna2;
+  </select>
+  
+  <select id="getQnaList" resultType="com.spring.javagreenS.vo.QnaVO">
+    select *, cast(timestampdiff(minute, wDate, now())/60 as signed integer) as diffTime from qna2 order by qnaIdx desc, idx desc limit #{startIndexNo},#{pageSize};
+  </select>
+  
+  <select id="getEmail" resultType="String">
+    select email from member2 where mid = #{mid};
+  </select>
+  
+  <select id="getCountIdx" resultType="int">
+  	select count(idx) from qna2;
+  </select>
+  
+  <select id="getMaxIdx" resultType="int">
+  	select Max(idx) from qna2;
+  </select>
+  <select id="getQnaContent" resultType="com.spring.javagreenS.vo.QnaVO">
+    select * from qna2 where idx = #{idx};
+  </select>
+  
+  <insert id="qnaInputOk">
+    insert into qna2 values (#{vo.idx},#{vo.qnaIdx},#{vo.name},#{vo.title},#{vo.email},#{vo.pwd},default,#{vo.content},#{vo.qnaSw});
+  </insert>
+</mapper>

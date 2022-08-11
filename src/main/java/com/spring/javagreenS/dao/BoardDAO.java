@@ -44,4 +44,8 @@ public interface BoardDAO {
 
 	public void setBoardReplyDeleteOk(@Param("idx") int idx);
 
+	public void setGoodCount(@Param("idx") int idx);
+
+	public void setGoodCountMinus(@Param("idx") int idx);
+
 }

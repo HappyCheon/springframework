@@ -222,4 +222,45 @@ public class BoardController {
 		boardService.setBoardReplyDeleteOk(idx);
 		return "";
 	}
+	
+	// 좋아요 처리(좋아요수 1증가하기, 중복방지처리함)
+	@ResponseBody
+	@RequestMapping(value = "/boGoodCount", method = RequestMethod.POST)
+	public String boGoodCountPost(int idx, HttpSession session) {
+		// 좋아요수 증가처리하기
+		String sw = "1"; // 이미 '좋아요'를 한번 눌렀으면 '0'으로 처음이면 '1'로 sw값을 보내준다.
+		ArrayList<String> goodIdx = (ArrayList) session.getAttribute("sGoodIdx");
+		if(goodIdx == null) {
+			goodIdx = new ArrayList<String>();
+		}
+		String imsiGoodIdx = "good" + idx;
+		if(!goodIdx.contains(imsiGoodIdx)) {
+			boardService.setGoodCount(idx);
+			goodIdx.add(imsiGoodIdx);
+			sw = "0";	// 좋아요 버튼을 클릭했을경우는 '0'을 반환
+		}
+		session.setAttribute("sGoodIdx", goodIdx);
+		return sw;
+	}
+	
+	// 좋아요 처리(1씩 증가 또는 1씩 감소 처리함)
+	@ResponseBody
+	@RequestMapping(value = "/boGoodPMCount", method = RequestMethod.POST)
+	public String boGoodPMCountPost(int idx, HttpSession session) {
+		String goodSw = (String) session.getAttribute("sGoodSw");  // 기존에 저장된 sw가 있으면 읽어오고, 없으면 새로 생성시켜준다.
+		if(goodSw == null) {
+			boardService.setGoodCount(idx);	// 좋아요수 증가처리후 세션스위치를 1로 주었다.
+			session.setAttribute("sGoodSw", "1");
+		}
+		else if(goodSw.equals("1")) {
+			boardService.setGoodCountMinus(idx);	// 좋아요수 감소처리후 세션스위치를 0로 주었다.
+			session.setAttribute("sGoodSw", "0");
+		}
+		else {
+			boardService.setGoodCount(idx);	// 좋아요수 증가처리후 세션스위치를 1로 주었다.
+			session.setAttribute("sGoodSw", "1");
+		}
+		
+		return "";
+	}
 }

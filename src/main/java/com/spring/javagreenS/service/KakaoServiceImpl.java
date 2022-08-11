@@ -37,6 +37,7 @@ public class KakaoServiceImpl implements KakaoService {
       // sb.append("&client_id=9d26530cd44f56a1c06803d9c263fa4b");
       sb.append("&client_id=ad8a95f25da4d209c0cad67cf5f6da01");
       sb.append("&redirect_uri=http://localhost:9090/javagreenS/kakao/kakaoMain");
+      // sb.append("&redirect_uri=http://49.142.157.251:9090/javagreenS/kakao/kakaoMain");
       sb.append("&code="+code);
       
       bw.write(sb.toString());

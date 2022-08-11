@@ -194,7 +194,7 @@ public class MemberController {
 			// 자동 회원 가입시켜준다.
 			memberService.setKakaoMemberInputOk(mid,pwd,nickName,email);
 			
-			// 다시 로그인 인증으로 보낸다.
+			// 다시 로그인 인증으로 보낸다. - 바로 로그인처리로 보내도 되는데, 현재는 '아이디/비밀번호'등록후 입력과 같이 처리하기 위함이다.
 			model.addAttribute("email", email);
 			return "redirect:/member/memKakaoLogin";
 		}

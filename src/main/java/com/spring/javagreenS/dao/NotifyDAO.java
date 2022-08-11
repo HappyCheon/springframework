@@ -22,4 +22,6 @@ public interface NotifyDAO {
 
 	public List<NotifyVO> getNotifyPopup();
 
+	public NotifyVO getNofifyView(@Param("idx") int idx);
+
 }

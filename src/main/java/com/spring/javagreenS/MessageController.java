@@ -181,6 +181,14 @@ public class MessageController {
 			model.addAttribute("msg", "공지사항이 수정되었습니다.");
 			model.addAttribute("url", "notify/nList");
 		}
+		else if(msgFlag.equals("qnaInputOk")) {
+			model.addAttribute("msg", "QnA에 글이 등록되었습니다.");
+			model.addAttribute("url", "qna/qnaList");
+		}
+		else if(msgFlag.equals("inquiryInputOk")) {
+			model.addAttribute("msg", "1:1 문의사항이 등록되었습니다.");
+			model.addAttribute("url", "inquiry/inquiryList");
+		}
 		
 		return "include/message";
 	}

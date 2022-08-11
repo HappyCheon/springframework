@@ -44,4 +44,8 @@ public interface BoardService {
 
 	public void setBoardReplyDeleteOk(int idx);
 
+	public void setGoodCount(int idx);
+
+	public void setGoodCountMinus(int idx);
+
 }

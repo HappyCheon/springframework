@@ -14,6 +14,7 @@
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     <a href="${ctp}/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
     <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Guest</a>
+    <a href="${ctp}/notify/mnList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Notice</a>
     <c:if test="${sLevel <= 4}">
 	    <a href="${ctp}/board/boList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Board</a>
 	    <a href="${ctp}/pds/pdsList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Pds</a>
@@ -50,6 +51,8 @@
 	        <a href="${ctp}/dbShop/dbCartList" class="w3-bar-item w3-button">장바구니</a>
 	        <a href="${ctp}/dbShop/dbMyOrder" class="w3-bar-item w3-button">주문현황</a>
 	        <a href="${ctp}/shop/input/productMenu" class="w3-bar-item w3-button">상품등록연습</a>
+	        <a href="${ctp}/qna/qnaList" class="w3-bar-item w3-button">QnA</a>
+	        <a href="${ctp}/inquiry/inquiryList" class="w3-bar-item w3-button">1:1문의</a>
 	      </div>
 	    </div>
 	    <div class="w3-dropdown-hover w3-hide-small">

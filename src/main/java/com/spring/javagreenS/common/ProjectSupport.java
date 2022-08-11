@@ -32,9 +32,9 @@ public class ProjectSupport {
 		
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String uploadPath = "";
-		//if(flag.equals("member")) {
+//		if(flag.equals("member")) {
 		  uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
-		//}
+//		}
 		
 		FileOutputStream fos = new FileOutputStream(uploadPath + saveFileName);
 		fos.write(data);

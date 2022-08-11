@@ -496,7 +496,6 @@ public class DbShopController {
 		
 		// 오늘 구매한 내역을 초기화면에 보여준다.
 		List<DbProductVO> vos = dbShopService.getMyOrderList(pageVo.getStartIndexNo(), pageSize, mid);
-		System.out.println("vos : " + vos);
 		model.addAttribute("vos", vos);
 		model.addAttribute("pageVo",pageVo);
 		

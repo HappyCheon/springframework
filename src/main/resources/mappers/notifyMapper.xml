@@ -13,6 +13,11 @@
   	select * from notify2 where popupSw = 'Y';
   </select>
 	
+	<select id="getNofifyView" resultType="com.spring.javagreenS.vo.NotifyVO">
+  	<!-- select * from notify2 where popupSw = 'Y' and idx = #{idx}; -->
+  	select * from notify2 where idx = #{idx};
+  </select>
+	
 	<insert id="nInput">
 	  insert into notify2 values (default,#{vo.name},#{vo.title},#{vo.content},#{vo.startDate},#{vo.endDate},#{vo.popupSw});
 	</insert>

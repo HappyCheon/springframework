@@ -48,5 +48,10 @@ public class NotifyServiceImp implements NotifyService {
 	public List<NotifyVO> getNotifyPopup() {
 		return notifyDAO.getNotifyPopup();
 	}
+
+	@Override
+	public NotifyVO getNofifyView(int idx) {
+		return notifyDAO.getNofifyView(idx);
+	}
 	
 }

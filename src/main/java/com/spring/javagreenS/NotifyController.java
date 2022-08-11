@@ -87,6 +87,7 @@ public class NotifyController {
 		return map;
 	}
 	
+	// 공지사항 리스트 보기(사이트에 방문한 모든 사용자)
 	@RequestMapping(value="/mnList", method=RequestMethod.GET)
 	public String mnListGet(Model model) {
 		List<NotifyVO> vos = notifyService.getNotifyList();
@@ -94,4 +95,12 @@ public class NotifyController {
 		return "notify/mnList";
 	}
 	
+	// 공지사항 팝업으로 보기
+	@RequestMapping(value="/notifyView", method=RequestMethod.GET)
+	public String mnNotifyViewGet(int idx, Model model) {
+		NotifyVO vo = notifyService.getNofifyView(idx);
+		model.addAttribute("vo", vo);
+		
+		return "notify/notifyView";
+	}
 }

@@ -32,14 +32,30 @@
     	
     });
   
+    // 좋아요 클릭시에 증가(중복증가 불가처리함)
     function goodCheck() {
     	$.ajax({
     		type  : "post",
-    		url   : "${ctp}/boGoodCount",
+    		url   : "${ctp}/board/boGoodCount",
     		data  : {idx : ${vo.idx}},
     		success:function(data) {
-    			if(data == "0") alert("이미 좋아요 버튼을 클릭하셨습니다.");
+    			if(data == "1") alert("이미 좋아요 버튼을 클릭하셨습니다.");
     			else location.reload();
+    		},
+    		error : function() {
+    			alert("전송오류~~");
+    		}
+    	});
+    }
+    
+    // 좋아요 클릭시에 증가/감소 처리(1씩...)
+    function goodPMCheck() {
+    	$.ajax({
+    		type  : "post",
+    		url   : "${ctp}/board/boGoodPMCount",
+    		data  : {idx : ${vo.idx}},
+    		success:function() {
+    			location.reload();
     		},
     		error : function() {
     			alert("전송오류~~");
@@ -253,7 +269,8 @@
     	<th>홈페이지</th>
     	<td>${vo.homePage}</td>
     	<th>좋아요</th>
-    	<td><a href="javascript:goodCheck()">❤</a>(${vo.good}) / 👍 / 👎 </tr>
+    	<td><a href="javascript:goodCheck()">❤</a>(${vo.good}) / 👍 / 👎 / <a href="javascript:goodPMCheck()">🤙</a></td>
+    </tr>
     <tr>
     	<th>글내용</th>
     	<td colspan="3" style="height:220px">${fn:replace(vo.content,newLine,"<br/>")}</td>

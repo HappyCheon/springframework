@@ -228,6 +228,16 @@ public class BoardServiceImpl implements BoardService {
 	public void setBoardReplyDeleteOk(int idx) {
 		boardDAO.setBoardReplyDeleteOk(idx);
 	}
+
+	@Override
+	public void setGoodCount(int idx) {
+		boardDAO.setGoodCount(idx);
+	}
+
+	@Override
+	public void setGoodCountMinus(int idx) {
+		boardDAO.setGoodCountMinus(idx);
+	}
 	
 }
 
