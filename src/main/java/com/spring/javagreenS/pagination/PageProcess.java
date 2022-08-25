@@ -105,6 +105,9 @@ public class PageProcess {
 		else if(section.equals("inquiry")) {
 			totRecCnt = inquiryDAO.totRecCnt(part, searchString);
 		}
+		else if(section.equals("adminInquiry")) {
+			totRecCnt = adminDAO.totRecCntAdmin(part);
+		}
 		
 		int totPage = (totRecCnt%pageSize)==0 ? totRecCnt/pageSize : (totRecCnt/pageSize)+1;
 		int startIndexNo = (pag - 1) * pageSize;

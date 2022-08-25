@@ -27,13 +27,13 @@
 		function updateCheck() {
 			var ans = confirm("수정하시겠습니까?");
 			if(!ans) return false;
-			else location.href="${ctp}/inquiryUpdate.in?idx=${vo.idx}&pag=${pag}";
+			else location.href="${ctp}/inquiry/inquiryUpdate?idx=${vo.idx}&pag=${pag}";
 		}
 		
 		function deleteCheck() {
 			var ans = confirm("삭제하시겠습니까?");
 			if(!ans) return false;
-			location.href="${ctp}/inquiryDelete.in?idx=${vo.idx}&fSName=${vo.fSName}&pag=${pag}";
+			location.href="${ctp}/inquiry/inquiryDelete?idx=${vo.idx}&fSName=${vo.FSName}&pag=${pag}";
 		}
 	</script>
 	<style>
@@ -68,7 +68,7 @@
 		</tr>
 		<tr>
 			<th>작성일</th>
-			<td>${fn:substring(vo.wDate,0,10)}</td>
+			<td>${fn:substring(vo.WDate,0,10)}</td>
 			<th>주문번호</th>
 			<td>
 				<c:if test="${!empty vo.jumunNo}">${vo.jumunNo}</c:if>
@@ -78,9 +78,9 @@
 		<tr>
 			<td colspan="4">
 	      <!-- 이미지 파일  -->
-	      <!-- 
-	    	<c:set var="fName" value="${vo.fName}"/>
-	      <c:set var="fSName" value="${vo.fSName}"/>
+	      <!-- 여러장 처리시는 아래처럼 처리한다.(여기선 1장만 처리하기게 생략한다.)
+	    	<c:set var="fName" value="${vo.FName}"/>
+	      <c:set var="fSName" value="${vo.FSName}"/>
 	      <c:set var="fSNameLen" value="${fn:length(fSName)}"/>
 	      <c:set var="fSName" value="${fn:substring(fSName, fSNameLen-4, fSNameLen-1)}"/>
 	      <c:set var="fSName" value="${fn:toUpperCase(fSName)}"/>
@@ -92,7 +92,7 @@
 	        </c:forEach>
 	      </c:if>
 	      -->
-	      <c:if test="${!empty vo.fSName}"><img src="${ctp}/data/inquiry/${vo.fSName}" width="400"/><br/></c:if>
+	      <c:if test="${!empty vo.FSName}"><img src="${ctp}/inquiry/${vo.FSName}" width="400px"/><br/></c:if>
 	      <br/>
 	      <p>${fn:replace(vo.content,newLine,"<br/>")}<br/></p>
 	    	<hr/>
@@ -100,6 +100,7 @@
 		</tr>
 	</table>
 	
+	<!-- 관리자가 답변을 달았을때는 현재글을 수정/삭제 처리 못하도록 하고 있다. -->
  	<div style="text-align: right" class="row">
 		<span class="col"></span>
 		<c:if test="${empty reVO.reContent}">
@@ -108,7 +109,7 @@
 				<input type="button" value="삭 제" onclick="deleteCheck()" class="btn btn-secondary col"/>
 				<span class="col"></span>
 		</c:if>
-		<input type="button" value="목록으로" onclick="location.href='${ctp}/inquiryList.in?pag=${pag}'" class="btn btn-secondary col"/>
+		<input type="button" value="목록으로" onclick="location.href='${ctp}/inquiry/inquiryList?pag=${pag}'" class="btn btn-secondary col"/>
 		<span class="col"></span>
 	</div>
 	

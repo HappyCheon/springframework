@@ -43,6 +43,7 @@
         <div class="panel-body pt-2 pb-2"><a href="${ctp}/dbShop/dbShopList" target="adContent">상품등록조회</a></div>
         <div class="panel-body pt-2 pb-2"><a href="${ctp}/dbShop/dbOption" target="adContent">옵션등록관리</a></div>
         <div class="panel-body pt-2 pb-2"><a href="${ctp}/dbShop/adminOrderStatus" target="adContent">주문관리</a></div>
+        <div class="panel-body pt-2 pb-2"><a href="${ctp}/admin/adInquiryList" target="adContent">1:1문의</a></div>
       </div>
     </div>
     <div class="panel panel-default">

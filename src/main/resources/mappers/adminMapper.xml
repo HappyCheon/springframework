@@ -27,6 +27,46 @@
     select qrCode from qrCode where idx = #{idx};
   </select>
   
+  <select id="totRecCntAdmin" resultType="int">
+    <if test="part == '전체'">
+      select count(*) from inquiry2;
+    </if>
+    <if test="part != '전체'">
+      select count(*) from inquiry2 where reply = #{part};
+    </if>
+  </select>
+  
+  <select id="getInquiryListAdmin" resultType="com.spring.javagreenS.vo.InquiryVO">
+    <if test="part == '전체'">
+      select * from inquiry2 order by idx desc limit #{startIndexNo},#{pageSize};
+    </if>
+    <if test="part != '전체'">
+      select * from inquiry2 where reply = #{part} order by idx desc limit #{startIndexNo},#{pageSize};
+    </if>
+  </select>
+  
+  <select id="getInquiryContent" resultType="com.spring.javagreenS.vo.InquiryVO">
+    select * from inquiry2 where idx = #{idx};
+  </select>
+  
+  <select id="getInquiryReplyContent" resultType="com.spring.javagreenS.vo.InquiryReplyVO">
+    select * from inquiry2Reply where inquiryIdx = #{idx};
+  </select>
+  
+  
+  
+  <insert id="setInquiryInputAdmin">
+    insert into inquiry2Reply values (default,#{vo.inquiryIdx},default,#{vo.reContent});
+  </insert>
+  
+  
+  <update id="setInquiryReplyUpdate">
+    update inquiry2Reply set reContent = #{reVo.reContent} where reIdx = #{reVo.reIdx};
+  </update>
+  
+  <update id="setInquiryUpdateAdmin">
+    update inquiry2 set reply = '답변완료' where idx = #{inquiryIdx};
+  </update>
   
   
   <delete id="setQrCodeDelete">
@@ -35,6 +75,10 @@
   
   <delete id="setQrCodeSelectDelete">
     delete from qrCode where idx = #{idx};
+  </delete>
+  
+  <delete id="setInquiryReplyDelete">
+    delete from inquiry2Reply where reIdx = #{reIdx};
   </delete>
   
 </mapper>

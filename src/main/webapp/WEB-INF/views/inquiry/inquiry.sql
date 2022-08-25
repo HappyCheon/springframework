@@ -29,7 +29,8 @@ CREATE TABLE inquiry2Reply (
 );
 /* drop table inquiry2Reply; */
 
-desc board;
+desc inquiry2Reply;
+desc inquiry2;
 drop table inquiry2;
 
 select * from inquiry2;

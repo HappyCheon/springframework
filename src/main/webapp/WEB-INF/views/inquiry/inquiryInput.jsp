@@ -23,7 +23,7 @@
 
         filesArr.forEach(function(f) {
             if(!f.type.match("image.*")) {
-                alert("확장자는 이미지 확장자만 가능합니다.");
+                alert("확장자는 이미지(그림) 확장자만 가능합니다.");
                 return;
             }
 
@@ -132,7 +132,7 @@
 			  <td colspan='2' class="text-center">
 			    <input type="button" value="등 록" onclick="fCheck()" class="btn btn-secondary w-25"/> &nbsp;
 			    <input type="reset" value="다시입력" class="btn btn-secondary w-25"/> &nbsp;
-			    <input type="button" value="돌아가기" onclick="location.href='${ctp}/inquiryList?pag=${pageVo.pag}';" class="btn btn-secondary w-25"/>
+			    <input type="button" value="돌아가기" onclick="location.href='${ctp}/inquiry/inquiryList?pag=${pageVo.pag}';" class="btn btn-secondary w-25"/>
 			  </td>
 			</tr>
 		</table>

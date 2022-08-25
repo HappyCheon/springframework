@@ -15,7 +15,8 @@ public class MessageController {
 			@RequestParam(value="flag", defaultValue = "", required=false) String flag,
 			@RequestParam(value="name", defaultValue = "", required=false) String name,
 			@RequestParam(value="mid", defaultValue = "", required=false) String mid,
-			@RequestParam(value="idx", defaultValue = "0", required=false) int idx) {
+			@RequestParam(value="pag", defaultValue = "1", required=false) int pag,
+		@RequestParam(value="idx", defaultValue = "0", required=false) int idx) {
 		
 		if(msgFlag.equals("guestInputOk")) {
 			model.addAttribute("msg", "방명록에 글이 등록 되었습니다.");
@@ -188,6 +189,14 @@ public class MessageController {
 		else if(msgFlag.equals("inquiryInputOk")) {
 			model.addAttribute("msg", "1:1 문의사항이 등록되었습니다.");
 			model.addAttribute("url", "inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryUpdateOk")) {
+			model.addAttribute("msg", "1:1 문의사항이 수정되었습니다.");
+			model.addAttribute("url", "inquiry/inquiryView?idx="+idx);
+		}
+		else if(msgFlag.equals("inquiryDeleteOk")) {
+			model.addAttribute("msg", "1:1 문의사항이 삭제되었습니다.");
+			model.addAttribute("url", "inquiry/inquiryList?pag="+pag);
 		}
 		
 		return "include/message";

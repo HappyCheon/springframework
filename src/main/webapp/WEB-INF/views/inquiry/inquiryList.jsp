@@ -43,7 +43,7 @@
 			<c:if test="${!empty vos}">
 				<c:forEach var="vo" items="${vos}">
 					<tr>
-						<td style="text-align:left"><a href="${ctp}/inquiry/inquiryView.in?idx=${vo.idx}&pag=${pag}">[${vo.part}] ${vo.title}</a></td>
+						<td style="text-align:left"><a href="${ctp}/inquiry/inquiryView?idx=${vo.idx}&pag=${pageVo.pag}">[${vo.part}] ${vo.title}</a></td>
 						<td>${vo.mid}</td>
 						<td>${fn:substring(vo.WDate,0,10)}</td>
 						<td>

@@ -40,13 +40,13 @@
     }
  
 		function fCheck() {
-			var title = myform.title.value;
-			var part = myform.part.value;
-			var content = myform.content.value;
+			var title = myForm.title.value;
+			var part = myForm.part.value;
+			var content = myForm.content.value;
 			
 			if(title=="") {
 				alert("제목을 입력하세요.");
-				myform.title.focus();
+				myForm.title.focus();
 				return false;
 			}
 			else if(part=="") {
@@ -55,11 +55,11 @@
 			}
 			else if(content=="") {
 				alert("내용을 입력하세요.");
-				myform.content.focus();
+				myForm.content.focus();
 				return false;
 			}
 			else {
-				myform.submit();
+				myForm.submit();
 			}
 		}
 	</script>
@@ -82,7 +82,7 @@
 <jsp:include page="/WEB-INF/views/include/slide2.jsp"/>
 <p><br/></p>
 <div class="container">
-	<form name="myform" method="post" action="${ctp}/inquiryUpdateOk.in" enctype="Multipart/form-data">
+	<form name="myForm" method="post" enctype="Multipart/form-data">
 		<h2 style="font-weight: 600">1:1 문의 작성하기</h2>
 		<br/>
 		<table class="table table-bordered">
@@ -104,7 +104,7 @@
 			</tr>
 			<tr> 
 				<th>주문번호</th>
-				<td><input type="text" name="oIdx" value="${vo.jumunNo}" class="form-control" maxlength="100" placeholder="주문번호를 알고계시면 입력해주세요."/></td>
+				<td><input type="text" name="jumunNo" value="${vo.jumunNo}" class="form-control" maxlength="100"/></td>
 			</tr>
 			<tr> 
 				<th>내용</th>
@@ -120,29 +120,29 @@
 				<td>
 					<!-- multiple로 처리할 경우 jsp에서는 여러개의 파일 업로드는 가능하지만, 파일명을 알아오지 못한다. 따라서 이곳에서는 한개 파일만 업로드하는것으로 처리한다. -->
 					<!-- <input type="file" multiple="multiple" name="file" id="file" accept=".zip,.jpg,.gif,.png"/><br/><br/> -->
-					<input type="file" name="newFName" id="newFName" accept=".zip,.jpg,.gif,.png"/><br/><br/>
-					- 파일 형식은 zip / jpg / gif / png만 허용합니다.
+					<input type="file" name=file id="file" accept=".zip,.jpg,.gif,.png"/><br/><br/>
+					- 파일 형식은 zip / jpg / gif / png만 허용합니다.(<font color="red">사진을 변경하시면 기존 사진은 삭제됩니다.</font>)
 				</td>
 			</tr>
-				<tr>
-				  <th class="m-0 p-0"></th>
-				  <td class="m-0 p-0">
-					  <span class="imgs_wrap"><c:if test="${!empty vo.fSName}"><img src="${ctp}/data/inquiry/${vo.fSName}" width="200px"/></c:if></span>
-				  </td>
-				</tr>
+			<tr>
+			  <th class="m-0 p-0"></th>
+			  <td class="m-0 p-0">
+				  <span class="imgs_wrap"><c:if test="${!empty vo.FSName}"><img src="${ctp}/inquiry/${vo.FSName}" width="200px"/></c:if></span>
+			  </td>
+			</tr>
 			<tr>
 			  <td colspan='2' class="text-center">
 			    <input type="button" value="수 정" onclick="fCheck()" class="btn btn-secondary w-25"/> &nbsp;
 			    <input type="reset" value="다시입력" class="btn btn-secondary w-25"/> &nbsp;
-			    <input type="button" value="돌아가기" onclick="location.href='${ctp}/inquiryList.in?pag=${pag}';" class="btn btn-secondary w-25"/>
+			    <input type="button" value="돌아가기" onclick="location.href='${ctp}/inquiry/inquiryList?pag=${pag}';" class="btn btn-secondary w-25"/>
 			  </td>
 			</tr>
 		</table>
 		<p><br/></p>
 		<input type="hidden" name="idx" value="${vo.idx}"/>
 		<input type="hidden" name="pag" value="${pag}"/>
-		<input type="hidden" name="fName" value="${vo.fName}"/>
-		<input type="hidden" name="fSName" value="${vo.fSName}"/>
+		<input type="hidden" name="fName" value="${vo.FName}"/>
+		<input type="hidden" name="fSName" value="${vo.FSName}"/>
 	</form>
 </div>
 <jsp:include page="/WEB-INF/views/include/footer.jsp"/>
